@@ -1,0 +1,10 @@
+defaults:
+  - data: data
+  - model: model
+  - train: train
+  - evaluate: evaluate
+  - _self_
+
+hydra:
+  run:
+    dir: .
