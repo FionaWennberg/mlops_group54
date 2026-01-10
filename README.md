@@ -63,3 +63,25 @@ The directory structure of the project looks like this:
 Created using [mlops_template](https://github.com/SkafteNicki/mlops_template),
 a [cookiecutter template](https://github.com/cookiecutter/cookiecutter) for getting
 started with Machine Learning Operations (MLOps).
+
+# Status:
+
+# Issues:
+Downloading data:
+-	With every git pull, we download data – heavy an not optimal, solvable by:
+-	git rm -r --cached data/raw
+-	git commit -m "Stop tracking raw dataset (keep local only)"
+-	git push
+- We shoul all jsut have the data locally in folders
+- I have added raw data to gitignore, so when we push it will not be pushed, but since its already in github, I think we need to remove it from there. This can eb done with the above solution. 
+
+Two data processing pipelines:
+- one using data.py, config files and hydra
+- one using kaggle and "mnist style" - however, files are in .jpg format and mnist style does not support this.
+
+# Pipeline:
+- Fill out model.py with some neural network backbone, maybe resnet-50?
+- Fill out train.py
+- Fill out evaluate.py
+- Create docker files
+
