@@ -1,0 +1,6 @@
+train_dir: data/raw/training
+test_dir: data/raw/testing
+processed_dir: data/processed
+image_size: 224
+num_workers: 4
+preprocess_batch_size: 64
