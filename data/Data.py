@@ -13,8 +13,8 @@ def preprocess_data(raw_dir: str, processed_dir: str) -> None:
 
     transform = transforms.Compose(
         [
-            transforms.Resize((224, 224)),   # standard size
-            transforms.ToTensor(),           # [0,1]
+            transforms.Resize((224, 224)),  # standard size
+            transforms.ToTensor(),  # [0,1]
             transforms.Normalize(
                 mean=[0.485, 0.456, 0.406],
                 std=[0.229, 0.224, 0.225],
@@ -52,6 +52,7 @@ def preprocess_data(raw_dir: str, processed_dir: str) -> None:
 
     print("Preprocessing complete")
     print("Class mapping:", train_dataset.class_to_idx)
+
 
 if __name__ == "__main__":
     typer.run(preprocess_data)

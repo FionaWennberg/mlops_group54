@@ -61,11 +61,8 @@ def _to_model_config(cfg: DictConfig) -> ModelConfig:
 def main(cfg: DictConfig) -> None:
     # Simple smoke test: build model and move to device
     model_cfg = _to_model_config(cfg)
-    _ = build_model(model_cfg).to(
-        torch.device("cuda" if torch.cuda.is_available() else "cpu")
-    )
+    _ = build_model(model_cfg).to(torch.device("cuda" if torch.cuda.is_available() else "cpu"))
 
 
 if __name__ == "__main__":
     main()
-
