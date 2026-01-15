@@ -4,6 +4,7 @@ from dataclasses import dataclass
 from pathlib import Path
 from typing import Any, Dict, Tuple
 
+import wandb
 import hydra
 import torch
 from omegaconf import DictConfig
@@ -181,6 +182,48 @@ def evaluate(cfg: DictConfig) -> Dict[str, Any]:
     # Add per-class accuracy as separate scalars
     for cls_idx, cls_acc in results.per_class_accuracy.items():
         metrics[f"eval/per_class_accuracy_{cls_idx}"] = cls_acc
+
+
+    # --- W&B logging (optional) ---
+    if "eval" in cfg and hasattr(cfg.eval, "wandb") and cfg.eval.wandb.get("enabled", False):
+        run = wandb.init(
+            project=str(cfg.eval.wandb.project),
+            entity=(None if cfg.eval.wandb.entity in [None, "null"] else str(cfg.eval.wandb.entity)),
+            name=(None if cfg.eval.wandb.run_name in [None, "null"] else str(cfg.eval.wandb.run_name)),
+            tags=list(getattr(cfg.eval.wandb, "tags", [])),
+            config={
+                "model": {
+                    "backbone": str(cfg.model.backbone),
+                    "pretrained": bool(cfg.model.pretrained),
+                    "num_classes": int(cfg.model.num_classes),
+                    "dropout": float(getattr(cfg.model, "dropout", 0.0)),
+                },
+                "data": {
+                    "processed_dir": str(cfg.data.processed_dir),
+                },
+                "eval": {
+                    "batch_size": int(getattr(cfg.eval, "batch_size", 32)),
+                    "checkpoint_path": str(ckpt_path),
+                },
+            },
+        )
+
+        # log scalar metrics
+        wandb.log(metrics)
+
+        # log confusion matrix (as a table)
+        cm = results.confusion_matrix.cpu().numpy()
+
+        table = wandb.Table(
+            columns=["true_class"] + [f"pred_{i}" for i in range(cm.shape[1])],
+        )
+
+        for true_idx in range(cm.shape[0]):
+            table.add_data(true_idx, *cm[true_idx].tolist())
+        wandb.log({"eval/confusion_matrix": table})
+        
+        wandb.finish()
+
 
     # Print a compact summary (CI/log friendly)
     print(f"Eval - loss: {results.loss:.4f} - acc: {results.accuracy:.4f} - n: {results.num_examples}")

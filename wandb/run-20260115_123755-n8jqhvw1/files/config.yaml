@@ -1,0 +1,59 @@
+_wandb:
+    value:
+        cli_version: 0.23.1
+        e:
+            qkj42n6h1mmjq7byudvozaam1le8oiyn:
+                cpu_count: 16
+                cpu_count_logical: 22
+                disk:
+                    /:
+                        total: "509722226688"
+                        used: "244432560128"
+                email: s246024@dtu.dk
+                executable: C:\Users\fiviw\mlops_group54\.venv\Scripts\python.exe
+                git:
+                    commit: 4e41b89ed6f10bcf11eeb963a26661a48dbb10e8
+                    remote: https://github.com/FionaWennberg/mlops_group54.git
+                host: Fionas_yoga
+                memory:
+                    total: "16573128704"
+                os: Windows-10-10.0.26200-SP0
+                program: -m mlops_group54_project.evaluate
+                python: CPython 3.11.9
+                root: C:\Users\fiviw\mlops_group54
+                startedAt: "2026-01-15T11:37:55.047082Z"
+                writerId: qkj42n6h1mmjq7byudvozaam1le8oiyn
+        m: []
+        python_version: 3.11.9
+        t:
+            "1":
+                - 1
+                - 41
+                - 50
+            "2":
+                - 1
+                - 41
+                - 50
+            "3":
+                - 2
+                - 15
+                - 16
+            "4": 3.11.9
+            "5": 0.23.1
+            "8":
+                - 3
+            "12": 0.23.1
+            "13": windows-amd64
+data:
+    value:
+        processed_dir: data/processed
+eval:
+    value:
+        batch_size: 32
+        checkpoint_path: models\model.pth
+model:
+    value:
+        backbone: resnet50
+        dropout: 0
+        num_classes: 4
+        pretrained: true
