@@ -1,5 +1,16 @@
 docs/site/
 
+
+
+# Raw data
+data/raw/
+data/training/
+data/testing/
+
+# Processed data
+data/processed/
+
+
 # test cache
 manual_test/
 

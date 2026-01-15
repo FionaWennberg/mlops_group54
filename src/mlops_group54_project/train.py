@@ -88,8 +88,7 @@ def train(cfg: DictConfig) -> None:
         running_acc = 0.0
         n = 0
 
-        for x, y in train_loader:
-            # Move batch to device.
+        for i, (x, y) in enumerate(train_loader):
             x, y = x.to(device), y.to(device)
 
             # Forward + backward + update.
@@ -98,12 +97,16 @@ def train(cfg: DictConfig) -> None:
             loss = loss_fn(logits, y)
             loss.backward()
             optimizer.step()
+            
+            if i % 100 == 0:
+                print(f"Epoch {epoch}, iter {i}, loss: {loss.item():.4f}")
 
             bs = x.size(0)
             # Track epoch metrics.
             running_loss += loss.item() * bs
             running_acc += (logits.argmax(dim=1) == y).float().sum().item()
             n += bs
+            
 
         epoch_loss = running_loss / max(n, 1)
         epoch_acc = running_acc / max(n, 1)
