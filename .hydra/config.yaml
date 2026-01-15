@@ -1,6 +1,6 @@
 data:
-  train_dir: data/raw/training
-  test_dir: data/raw/testing
+  train_dir: data/raw/Training
+  test_dir: data/raw/Testing
   processed_dir: data/processed
   image_size: 224
   num_workers: 4
@@ -18,4 +18,5 @@ train:
   output_dir: models
   checkpoint_name: model.pth
 evaluate:
-  batch_size: 64
+  checkpoint_path: models/model.pth
+  batch_size: 32
