@@ -1,6 +1,4 @@
-# src/your_package/data.py
-# Data stage: read raw JPGs from data/raw/{training,testing}/<class>/*.jpg
-# and write processed tensors to data/processed/*.pt (deterministic).
+# Data stage: læser rå billeder fra class-folders og gemmer deterministiske tensors i data/processed.
 
 from __future__ import annotations
 
@@ -25,8 +23,6 @@ class DataConfig:
     test_dir: Path
     processed_dir: Path
     image_size: int = 224
-    # This batch size is only for how fast we iterate while stacking/saving.
-    # It does NOT constrain future training batch size.
     preprocess_batch_size: int = 64
     num_workers: int = 4
 
@@ -35,7 +31,7 @@ class DataConfig:
 # Deterministic transform
 # -----------------------
 def build_preprocess_transform(image_size: int) -> transforms.Compose:
-    # Deterministic on purpose (no random augmentation) to make processed data reproducible.
+    # Deterministisk preprocessing (ingen random augmentation) for reproducerbare .pt-filer.
     return transforms.Compose(
         [
             transforms.Resize((image_size, image_size)),
@@ -71,7 +67,7 @@ class FolderDataset(Dataset):
         return len(self.ds)
 
     def __getitem__(self, index: int):
-        return self.ds[index]  # (image_tensor, label_int)
+        return self.ds[index]
 
 
 def _stack_dataset_to_tensors(
@@ -79,6 +75,7 @@ def _stack_dataset_to_tensors(
     batch_size: int,
     num_workers: int,
 ) -> Tuple[torch.Tensor, torch.Tensor]:
+    # Loader hele datasættet og stakker batches til (images, labels)
     loader = DataLoader(dataset, batch_size=batch_size, shuffle=False, num_workers=num_workers)
     xs: List[torch.Tensor] = []
     ys: List[torch.Tensor] = []
@@ -87,8 +84,8 @@ def _stack_dataset_to_tensors(
         xs.append(x)
         ys.append(y)
 
-    images = torch.cat(xs, dim=0)  # [N, C, H, W]
-    labels = torch.cat(ys, dim=0)  # [N]
+    images = torch.cat(xs, dim=0)
+    labels = torch.cat(ys, dim=0)
     return images, labels
 
 
@@ -108,7 +105,6 @@ def preprocess_and_save(cfg: DataConfig) -> None:
     train_ds = FolderDataset(cfg.train_dir, transform=tf)
     test_ds = FolderDataset(cfg.test_dir, transform=tf)
 
-    # Ensure train/test mapping matches
     if train_ds.class_to_idx != test_ds.class_to_idx:
         raise RuntimeError(
             "Train and test class mappings differ.\n"
@@ -128,6 +124,7 @@ def preprocess_and_save(cfg: DataConfig) -> None:
         num_workers=cfg.num_workers,
     )
 
+    # Gemmer tensors + class mapping til senere træning/evaluering
     torch.save(train_images, cfg.processed_dir / "train_images.pt")
     torch.save(train_labels, cfg.processed_dir / "train_labels.pt")
     torch.save(test_images, cfg.processed_dir / "test_images.pt")

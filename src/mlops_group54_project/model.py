@@ -11,6 +11,7 @@ from torchvision import models
 
 @dataclass(frozen=True)
 class ModelConfig:
+    # Overordnet model-konfiguration (backbone + klassifikationshead)
     backbone: str = "resnet50"
     pretrained: bool = True
     num_classes: int = 4
@@ -22,6 +23,7 @@ def build_model(cfg: ModelConfig) -> nn.Module:
     Build a classification model (logits output).
     For ResNet50, replaces the final fully-connected layer to match num_classes.
     """
+    # Bygger en ResNet50 og tilpasser sidste lag til cfg.num_classes
     if cfg.backbone != "resnet50":
         raise ValueError(f"Unsupported backbone: {cfg.backbone}. Expected 'resnet50'.")
 
@@ -48,6 +50,7 @@ def build_model(cfg: ModelConfig) -> nn.Module:
 
 
 def _to_model_config(cfg: DictConfig) -> ModelConfig:
+    # Oversætter Hydra/OmegaConf config til en typed dataclass
     m = cfg.model
     return ModelConfig(
         backbone=str(m.backbone),
