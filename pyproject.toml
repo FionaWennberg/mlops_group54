@@ -57,4 +57,5 @@ explicit = true
 line-length = 120
 
 [tool.coverage.run]
+source = ["mlops_group54_project"]
 omit = ["tests/*"]
