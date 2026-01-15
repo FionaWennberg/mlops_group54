@@ -2,7 +2,7 @@ defaults:
   - data: data
   - model: model
   - train: train
-  - evaluate: evaluate
+  - eval: eval
   - _self_
 
 hydra:

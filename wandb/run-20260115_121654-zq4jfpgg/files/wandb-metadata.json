@@ -1,0 +1,26 @@
+{
+  "os":  "Windows-10-10.0.26200-SP0",
+  "python":  "CPython 3.11.9",
+  "startedAt":  "2026-01-15T11:16:54.877343Z",
+  "program":  "-m mlops_group54_project.evaluate",
+  "git":  {
+    "remote":  "https://github.com/FionaWennberg/mlops_group54.git",
+    "commit":  "4e41b89ed6f10bcf11eeb963a26661a48dbb10e8"
+  },
+  "email":  "s246024@dtu.dk",
+  "root":  "C:\\Users\\fiviw\\mlops_group54",
+  "host":  "Fionas_yoga",
+  "executable":  "C:\\Users\\fiviw\\mlops_group54\\.venv\\Scripts\\python.exe",
+  "cpu_count":  16,
+  "cpu_count_logical":  22,
+  "disk":  {
+    "/":  {
+      "total":  "509722226688",
+      "used":  "244194033664"
+    }
+  },
+  "memory":  {
+    "total":  "16573128704"
+  },
+  "writerId":  "hz48prwwxhfgx4q34v8akyekuitzy4fb"
+}

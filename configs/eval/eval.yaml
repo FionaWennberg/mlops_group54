@@ -1,0 +1,10 @@
+# configs/eval.yaml
+checkpoint_path: models/model.pth # set to "models/model.pth" or leave null to use train.output_dir/train.checkpoint_name
+batch_size: 32
+
+wandb:
+  enabled: true
+  project: mlops_group54_project
+  entity: null        # set to your W&B username or team, or keep null
+  run_name: null      # optional, e.g. "eval-resnet50"
+  tags: ["eval"]
