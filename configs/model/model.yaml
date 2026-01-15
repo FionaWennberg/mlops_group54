@@ -1,0 +1,4 @@
+backbone: resnet50
+pretrained: true
+num_classes: 4
+dropout: 0.0
