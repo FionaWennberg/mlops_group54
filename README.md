@@ -80,7 +80,7 @@ Forslag til, hvad vi mangler, og hvem der kigger på det:
 - W&B reporting (Fiona)
 - Unit test linting (Rico) (Fiona)
 - Unit test data (Phi og Lucas)
-- Unit test model (Fiona)
+- Unit test model (Fiona) 
 - Calculate code covrage (Ingeborg)
 - Create a data storage in GCP bucket and link with dvc setup (no data in git, only data in GCP) (Ingeborg)
 - Get model training in GCP using Run (Ingeborg)
