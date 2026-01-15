@@ -25,4 +25,3 @@ def test_folder_dataset_raises_when_missing_path():
     tf = build_preprocess_transform(image_size=224)
     with pytest.raises(FileNotFoundError):
         FolderDataset(root=Path("data/this_does_not_exist"), transform=tf)
-
