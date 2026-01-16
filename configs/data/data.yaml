@@ -1,5 +1,5 @@
-train_dir: data/raw/Training
-test_dir: data/raw/Testing
+train_dir: data/Raw_data/Training
+test_dir: data/Raw_data/Testing
 processed_dir: data/processed
 image_size: 224
 num_workers: 4
