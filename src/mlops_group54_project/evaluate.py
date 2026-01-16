@@ -183,10 +183,9 @@ def evaluate(cfg: DictConfig) -> Dict[str, Any]:
     for cls_idx, cls_acc in results.per_class_accuracy.items():
         metrics[f"eval/per_class_accuracy_{cls_idx}"] = cls_acc
 
-
     # --- W&B logging (optional) ---
     if "eval" in cfg and hasattr(cfg.eval, "wandb") and cfg.eval.wandb.get("enabled", False):
-        run = wandb.init(
+        wandb.init(
             project=str(cfg.eval.wandb.project),
             entity=(None if cfg.eval.wandb.entity in [None, "null"] else str(cfg.eval.wandb.entity)),
             name=(None if cfg.eval.wandb.run_name in [None, "null"] else str(cfg.eval.wandb.run_name)),
@@ -221,9 +220,8 @@ def evaluate(cfg: DictConfig) -> Dict[str, Any]:
         for true_idx in range(cm.shape[0]):
             table.add_data(true_idx, *cm[true_idx].tolist())
         wandb.log({"eval/confusion_matrix": table})
-        
-        wandb.finish()
 
+        wandb.finish()
 
     # Print a compact summary (CI/log friendly)
     print(f"Eval - loss: {results.loss:.4f} - acc: {results.accuracy:.4f} - n: {results.num_examples}")

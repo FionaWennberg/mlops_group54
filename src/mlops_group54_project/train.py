@@ -97,7 +97,7 @@ def train(cfg: DictConfig) -> None:
             loss = loss_fn(logits, y)
             loss.backward()
             optimizer.step()
-            
+
             if i % 100 == 0:
                 print(f"Epoch {epoch}, iter {i}, loss: {loss.item():.4f}")
 
@@ -106,7 +106,6 @@ def train(cfg: DictConfig) -> None:
             running_loss += loss.item() * bs
             running_acc += (logits.argmax(dim=1) == y).float().sum().item()
             n += bs
-            
 
         epoch_loss = running_loss / max(n, 1)
         epoch_acc = running_acc / max(n, 1)
