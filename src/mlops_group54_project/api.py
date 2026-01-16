@@ -10,6 +10,8 @@ from PIL import Image
 
 from mlops_group54_project.model import ModelConfig, build_model
 
+CLASS_NAMES = None
+
 
 def _device() -> torch.device:
     if torch.cuda.is_available():
@@ -34,9 +36,19 @@ app = FastAPI(title="Brain Tumor Inference API")
 DEVICE = _device()
 TRANSFORM = _build_infer_transform(image_size=224)
 
-# Defaults (you can later connect these to Hydra config)
+# Defaults
 CHECKPOINT_PATH = Path("models/model.pth")
-NUM_CLASSES = 4
+
+
+# Create class mapping
+CLASS_MAPPING_PATH = Path("data/processed/class_mapping.pt")
+
+if not CLASS_MAPPING_PATH.exists():
+    raise RuntimeError(f"class_mapping.pt not found at {CLASS_MAPPING_PATH.resolve()}")
+
+class_mapping = torch.load(CLASS_MAPPING_PATH, map_location="cpu")
+CLASS_NAMES = class_mapping["classes"]
+NUM_CLASSES = len(CLASS_NAMES)
 
 # Load model once at startup
 MODEL = build_model(ModelConfig(backbone="resnet50", pretrained=False, num_classes=NUM_CLASSES)).to(DEVICE)
@@ -75,5 +87,6 @@ async def predict(file: UploadFile = File(...)) -> Dict[str, Any]:
 
     return {
         "pred_class": pred,
-        "probs": [float(p) for p in probs.tolist()],
+        "pred_label": CLASS_NAMES[pred],
+        "probs": {CLASS_NAMES[i]: float(probs[i]) for i in range(len(CLASS_NAMES))},
     }

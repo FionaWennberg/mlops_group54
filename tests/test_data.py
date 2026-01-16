@@ -207,4 +207,3 @@ def test_to_data_config_reads_fields_and_defaults():
     )
     dc2 = data_mod._to_data_config(cfg2)
     assert dc2.preprocess_batch_size == 64
-
