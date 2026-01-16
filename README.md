@@ -82,6 +82,7 @@ Forslag til, hvad vi mangler, og hvem der kigger på det:
 - Unit test data (Phi og Lucas)
 - Unit test model (Fiona) 
 - Calculate code covrage (Ingeborg)
+- (Add pre-commit hooks to version control setup?)gsutil 
 - Create a data storage in GCP bucket and link with dvc setup (no data in git, only data in GCP) (Ingeborg)
 - Get model training in GCP using Run (Ingeborg)
 - Create FastAPI (Phi og Lucas)
