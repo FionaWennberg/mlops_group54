@@ -184,8 +184,9 @@ def evaluate(cfg: DictConfig) -> Dict[str, Any]:
         metrics[f"eval/per_class_accuracy_{cls_idx}"] = cls_acc
 
     # --- W&B logging (optional) ---
+    # --- W&B logging (optional) ---
     if "eval" in cfg and hasattr(cfg.eval, "wandb") and cfg.eval.wandb.get("enabled", False):
-        run = wandb.init(
+        wandb.init(
             project=str(cfg.eval.wandb.project),
             entity=(None if cfg.eval.wandb.entity in [None, "null"] else str(cfg.eval.wandb.entity)),
             name=(None if cfg.eval.wandb.run_name in [None, "null"] else str(cfg.eval.wandb.run_name)),
@@ -206,6 +207,7 @@ def evaluate(cfg: DictConfig) -> Dict[str, Any]:
                 },
             },
         )
+
 
         # log scalar metrics
         wandb.log(metrics)
