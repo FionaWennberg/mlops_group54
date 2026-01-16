@@ -1,0 +1,6 @@
+outs:
+- md5: 440a20f27877ad996e95c9e6d1d13da5.dir
+  size: 93079343
+  nfiles: 3264
+  hash: md5
+  path: brain-tumor-mri
