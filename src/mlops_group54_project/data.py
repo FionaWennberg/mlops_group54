@@ -24,7 +24,7 @@ class DataConfig:
     processed_dir: Path
     image_size: int = 224
     preprocess_batch_size: int = 64
-    num_workers: int = 4
+    num_workers: int = 1
 
 
 # -----------------------
