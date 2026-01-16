@@ -1,0 +1,5 @@
+[core]
+    remote = gcsremote
+['remote "gcsremote"']
+    url = gs://mlops_group54/
+    projectname = mlops2026-484211
