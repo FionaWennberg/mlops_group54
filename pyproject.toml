@@ -29,6 +29,7 @@ dependencies = [
     "kagglehub>=0.4.0",
     "python-multipart==0.0.21",
     "httpx>=0.28.1",
+    "markdown>=3.10",
 ]
 
 [dependency-groups]
