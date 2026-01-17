@@ -1,6 +1,6 @@
 data:
-  train_dir: data/raw/Training
-  test_dir: data/raw/Testing
+  train_dir: data/Raw_data/brain-tumor-mri/Training
+  test_dir: data/Raw_data/brain-tumor-mri/Testing
   processed_dir: data/processed
   image_size: 224
   num_workers: 4
@@ -17,6 +17,13 @@ train:
   weight_decay: 0.0001
   output_dir: models
   checkpoint_name: model.pth
-evaluate:
+eval:
   checkpoint_path: models/model.pth
   batch_size: 32
+  wandb:
+    enabled: true
+    project: mlops_group54_project
+    entity: null
+    run_name: null
+    tags:
+    - eval
