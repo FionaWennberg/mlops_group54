@@ -1,16 +1,14 @@
 from __future__ import annotations
 
 from pathlib import Path
-from typing import Any, Dict
+from typing import Any, Dict, List, Optional
 
 import torch
 from fastapi import FastAPI, File, HTTPException, UploadFile
-from torchvision import transforms
 from PIL import Image
+from torchvision import transforms
 
 from mlops_group54_project.model import ModelConfig, build_model
-
-CLASS_NAMES = None
 
 
 def _device() -> torch.device:
@@ -36,40 +34,59 @@ app = FastAPI(title="Brain Tumor Inference API")
 DEVICE = _device()
 TRANSFORM = _build_infer_transform(image_size=224)
 
-# Defaults
 CHECKPOINT_PATH = Path("models/model.pth")
-
-
-# Create class mapping
 CLASS_MAPPING_PATH = Path("data/processed/class_mapping.pt")
 
-if not CLASS_MAPPING_PATH.exists():
-    raise RuntimeError(f"class_mapping.pt not found at {CLASS_MAPPING_PATH.resolve()}")
+# These will be set on startup (or remain None if files are missing)
+MODEL: Optional[torch.nn.Module] = None
+CLASS_NAMES: List[str] = []
 
-class_mapping = torch.load(CLASS_MAPPING_PATH, map_location="cpu")
-CLASS_NAMES = class_mapping["classes"]
-NUM_CLASSES = len(CLASS_NAMES)
 
-# Load model once at startup
-MODEL = build_model(ModelConfig(backbone="resnet50", pretrained=False, num_classes=NUM_CLASSES)).to(DEVICE)
-MODEL.eval()
+@app.on_event("startup")
+def _load_artifacts() -> None:
+    """
+    Load class mapping + model weights at server startup.
+    If files are missing (common in CI), keep MODEL=None and CLASS_NAMES=[].
+    """
+    global MODEL, CLASS_NAMES
 
-if not CHECKPOINT_PATH.exists():
-    # It's okay to raise here so you immediately see what's wrong when starting the server
-    raise RuntimeError(f"Checkpoint not found at {CHECKPOINT_PATH.resolve()}")
+    if not CLASS_MAPPING_PATH.exists():
+        MODEL = None
+        CLASS_NAMES = []
+        return
 
-state = torch.load(CHECKPOINT_PATH, map_location=DEVICE)
-MODEL.load_state_dict(state)
+    class_mapping = torch.load(CLASS_MAPPING_PATH, map_location="cpu")
+    CLASS_NAMES = list(class_mapping["classes"])
+    num_classes = len(CLASS_NAMES)
+
+    model = build_model(ModelConfig(backbone="resnet50", pretrained=False, num_classes=num_classes)).to(DEVICE)
+    model.eval()
+
+    if not CHECKPOINT_PATH.exists():
+        MODEL = None
+        return
+
+    state = torch.load(CHECKPOINT_PATH, map_location=DEVICE)
+    model.load_state_dict(state)
+    MODEL = model
 
 
 @app.get("/")
 def health() -> Dict[str, Any]:
-    return {"status": "ok", "device": str(DEVICE), "checkpoint": str(CHECKPOINT_PATH)}
+    return {
+        "status": "ok",
+        "device": str(DEVICE),
+        "checkpoint": str(CHECKPOINT_PATH),
+        "model_loaded": MODEL is not None,
+        "num_classes": len(CLASS_NAMES),
+    }
 
 
 @app.post("/predict")
 async def predict(file: UploadFile = File(...)) -> Dict[str, Any]:
-    # Basic content-type check
+    if MODEL is None or not CLASS_NAMES:
+        raise HTTPException(status_code=503, detail="Model not loaded. Check checkpoint and class_mapping paths.")
+
     if file.content_type not in {"image/jpeg", "image/png"}:
         raise HTTPException(status_code=415, detail="Upload a JPEG or PNG image")
 
@@ -78,11 +95,11 @@ async def predict(file: UploadFile = File(...)) -> Dict[str, Any]:
     except Exception as e:
         raise HTTPException(status_code=400, detail=f"Could not read image: {e}")
 
-    x = TRANSFORM(img).unsqueeze(0).to(DEVICE)  # [1, 3, 224, 224]
+    x = TRANSFORM(img).unsqueeze(0).to(DEVICE)
 
     with torch.no_grad():
         logits = MODEL(x)
-        probs = torch.softmax(logits, dim=1).squeeze(0)  # [C]
+        probs = torch.softmax(logits, dim=1).squeeze(0)
         pred = int(torch.argmax(probs).item())
 
     return {
