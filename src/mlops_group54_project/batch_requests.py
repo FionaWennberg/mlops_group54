@@ -10,6 +10,7 @@ API_URL = "http://127.0.0.1:8000/predict"
 IMAGE_DIR = Path("data/raw/Testing")  # or data/raw/Training
 EXTS = {".jpg", ".jpeg", ".png"}
 
+
 def main(n: int = 200, sleep: float = 0.0) -> None:
     paths = [p for p in IMAGE_DIR.rglob("*") if p.suffix.lower() in EXTS]
     if not paths:
@@ -35,6 +36,7 @@ def main(n: int = 200, sleep: float = 0.0) -> None:
             print(f"Sent {i}/{len(paths)} (ok={ok})")
 
     print(f"Done. Sent {len(paths)} images (ok={ok}).")
+
 
 if __name__ == "__main__":
     main(n=200, sleep=0.0)

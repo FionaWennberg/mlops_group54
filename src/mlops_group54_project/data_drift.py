@@ -109,7 +109,6 @@ def build_reference_csv(max_images: int = 300) -> pd.DataFrame:
     return ref
 
 
-
 def load_current_csv(tail_n: int = 300) -> pd.DataFrame:
     if not REQUESTS_CSV.exists():
         raise FileNotFoundError(f"Could not find {REQUESTS_CSV}. Run the API and make some requests first.")
@@ -118,16 +117,19 @@ def load_current_csv(tail_n: int = 300) -> pd.DataFrame:
     # Keep only columns that exist in reference (plus any you want to monitor separately)
     # For drift, we'll focus on feature columns:
     feature_cols = [
-        "mean_r", "mean_g", "mean_b",
-        "std_r", "std_g", "std_b",
-        "brightness", "contrast", "sharpness",
+        "mean_r",
+        "mean_g",
+        "mean_b",
+        "std_r",
+        "std_g",
+        "std_b",
+        "brightness",
+        "contrast",
+        "sharpness",
     ]
     missing = [c for c in feature_cols if c not in cur.columns]
     if missing:
-        raise ValueError(
-            f"Current CSV is missing columns: {missing}. "
-            "Make sure your API is logging these features."
-        )
+        raise ValueError(f"Current CSV is missing columns: {missing}. " "Make sure your API is logging these features.")
 
     cur = cur.tail(tail_n).copy()
     return cur[feature_cols]
@@ -135,9 +137,15 @@ def load_current_csv(tail_n: int = 300) -> pd.DataFrame:
 
 def run_evidently_report(reference: pd.DataFrame, current: pd.DataFrame) -> None:
     feature_cols = [
-        "mean_r", "mean_g", "mean_b",
-        "std_r", "std_g", "std_b",
-        "brightness", "contrast", "sharpness",
+        "mean_r",
+        "mean_g",
+        "mean_b",
+        "std_r",
+        "std_g",
+        "std_b",
+        "brightness",
+        "contrast",
+        "sharpness",
     ]
 
     # Keep only columns that exist in BOTH (prevents crashes when current is missing cols)
@@ -176,12 +184,9 @@ def run_evidently_report(reference: pd.DataFrame, current: pd.DataFrame) -> None
         if hasattr(obj, "save_json"):
             json_path = REPORT_HTML.with_suffix(".json")
             obj.save_json(str(json_path))
-            raise RuntimeError(
-                f"Could not export HTML in this Evidently version, but saved JSON to {json_path}."
-            )
+            raise RuntimeError(f"Could not export HTML in this Evidently version, but saved JSON to {json_path}.")
 
     raise RuntimeError("Don't know how to export Evidently output in this Evidently version.")
-
 
 
 def main() -> None:
