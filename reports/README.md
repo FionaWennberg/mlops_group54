@@ -123,7 +123,7 @@ will check the repositories and the code to verify your answers.
 >
 > Answer:
 
---- question 1 fill here ---
+--- 54 ---
 
 ### Question 2
 > **Enter the study number for each member in the group**
@@ -168,7 +168,7 @@ will check the repositories and the code to verify your answers.
 >
 > Answer:
 
---- question 4 fill here ---
+--- We used the files pyproject.toml and uv.lock for managing dependencies and ensuring reproducibility. A new team member would simply have to run "uv sync" to set up their environment with the necessary dependencies installed, and as each dependency is marked by the package and the version number, this would equip them with the exact same environmental setup as current team members. The list automatically updates whenever "uv add ..." is run in the terminal. A requirements.txt file is also provided for pip-based workflows , however this is manually updated and less optimal compared to pyproject.toml and therefore a secondary option. ---
 
 ### Question 5
 
@@ -199,7 +199,7 @@ will check the repositories and the code to verify your answers.
 >
 > Answer:
 
---- question 6 fill here ---
+--- For larger projects, aligned concepts are important to keep a clear and uniform style of code writing, as it makes it easier for others to understand and interpret the functionality of the code. To ensure code quality and formatting, we implemented Ruff, which for example corrects unused import, duplicate lines, unused variables etc. This format was reached by running ruff format. The ruff check was run automatically in GitHub actions workflow for every pull request to main branch. This check was incormporated in the linting.yaml file in the .github/workflows folder. The purpose of the linting file is to only push changes to the main branch, when they align with the agreed standards for code style. Documentation was done through a combination of docstrings and inline comments. The docstrings were added at module and function level, where they described the purpose of components and their input and output. Inline comments were added for out own understanding and to quicly gain an overall view of the code blocks. ---
 
 ## Version control
 
@@ -218,7 +218,7 @@ will check the repositories and the code to verify your answers.
 >
 > Answer:
 
---- question 7 fill here ---
+--- In our continuous integration workflow we are testing multiple aspects of our project. We implemented unit test for the data processing and the model, primarily to remove bugs before merging changes to the main branch. The API's functionality was also tested through integrations testing. However, to increase the speed of the test, it was mocked using monkeypatch.  ---
 
 ### Question 8
 
