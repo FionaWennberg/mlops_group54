@@ -64,9 +64,6 @@ Created using [mlops_template](https://github.com/SkafteNicki/mlops_template),
 a [cookiecutter template](https://github.com/cookiecutter/cookiecutter) for getting
 started with Machine Learning Operations (MLOps).
 
-# Status:
-- I have added wandb, which will be used for logging, when we have a training code 
-
 
 # Check-liste status:
 
@@ -132,4 +129,16 @@ Not completed:
 •	If applicable, optimize the performance of your data loading using distributed data loading (M29)
 •	If applicable, optimize the performance of your training pipeline by using distributed training (M30)
 •	Play around with quantization, compilation and pruning for you trained models to increase inference speed (M31)
+
+# 30 questions:
+
+Answered:
+- 4
+- 6
+- 7
+- 9
+
+# Additional things to remember:
+- draw architectural design (see project day 5)
+
 

@@ -30,6 +30,9 @@ dependencies = [
     "python-multipart==0.0.21",
     "httpx>=0.28.1",
     "markdown>=3.10",
+    "evidently>=0.7.20",
+    "scikit-learn>=1.8.0",
+    "pandas>=2.3.3",
 ]
 
 [dependency-groups]
