@@ -1,10 +1,16 @@
 from __future__ import annotations
 
+from datetime import datetime, timezone
+from io import BytesIO
 from pathlib import Path
 from typing import Any, Dict, List, Optional
 
+import csv
+import hashlib
+
+import numpy as np
 import torch
-from fastapi import FastAPI, File, HTTPException, UploadFile
+from fastapi import BackgroundTasks, FastAPI, File, HTTPException, UploadFile
 from PIL import Image
 from torchvision import transforms
 
@@ -29,6 +35,29 @@ def _build_infer_transform(image_size: int = 224) -> transforms.Compose:
     )
 
 
+def _image_quality_features(img: Image.Image) -> tuple[float, float, float]:
+    """
+    Engineered image-quality features for drift monitoring:
+    - brightness: mean grayscale intensity (0..255)
+    - contrast: std grayscale intensity
+    - sharpness: variance of Laplacian (focus measure)
+    """
+    gray = np.array(img.convert("L"), dtype=np.float32)  # [H,W] in 0..255
+    brightness = float(gray.mean())
+    contrast = float(gray.std())
+
+    # Laplacian variance (simple focus metric)
+    lap = (
+        -4 * gray
+        + np.roll(gray, 1, axis=0)
+        + np.roll(gray, -1, axis=0)
+        + np.roll(gray, 1, axis=1)
+        + np.roll(gray, -1, axis=1)
+    )
+    sharpness = float(lap.var())
+    return brightness, contrast, sharpness
+
+
 app = FastAPI(title="Brain Tumor Inference API")
 
 DEVICE = _device()
@@ -40,6 +69,81 @@ CLASS_MAPPING_PATH = Path("data/processed/class_mapping.pt")
 # These will be set on startup (or remain None if files are missing)
 MODEL: Optional[torch.nn.Module] = None
 CLASS_NAMES: List[str] = []
+
+# Drift logging setup (CSV “database”)
+REQUEST_LOG_PATH = Path("data/monitoring/requests.csv")
+REQUEST_LOG_PATH.parent.mkdir(parents=True, exist_ok=True)
+
+CSV_HEADER = [
+    "time_utc",
+    "image_sha256",
+    "filename",
+    "content_type",
+    "pred_idx",
+    "pred_label",
+    "confidence",
+    # post-transform (normalized) per-channel statistics
+    "mean_r",
+    "mean_g",
+    "mean_b",
+    "std_r",
+    "std_g",
+    "std_b",
+    # engineered “image quality” features (raw image)
+    "brightness",
+    "contrast",
+    "sharpness",
+]
+
+
+def _append_csv_row(path: Path, header: list[str], row: list[Any]) -> None:
+    file_exists = path.exists()
+    with path.open("a", newline="", encoding="utf-8") as f:
+        w = csv.writer(f)
+        if not file_exists:
+            w.writerow(header)
+        w.writerow(row)
+
+
+def _log_request_to_csv(
+    *,
+    image_bytes: bytes,
+    filename: str,
+    content_type: str,
+    pred_idx: int,
+    pred_label: str,
+    confidence: float,
+    ch_mean: list[float],
+    ch_std: list[float],
+    brightness: float,
+    contrast: float,
+    sharpness: float,
+) -> None:
+    ts = datetime.now(timezone.utc).isoformat()
+    sha = hashlib.sha256(image_bytes).hexdigest()
+
+    _append_csv_row(
+        REQUEST_LOG_PATH,
+        CSV_HEADER,
+        [
+            ts,
+            sha,
+            filename,
+            content_type,
+            pred_idx,
+            pred_label,
+            float(confidence),
+            float(ch_mean[0]),
+            float(ch_mean[1]),
+            float(ch_mean[2]),
+            float(ch_std[0]),
+            float(ch_std[1]),
+            float(ch_std[2]),
+            float(brightness),
+            float(contrast),
+            float(sharpness),
+        ],
+    )
 
 
 @app.on_event("startup")
@@ -83,7 +187,10 @@ def health() -> Dict[str, Any]:
 
 
 @app.post("/predict")
-async def predict(file: UploadFile = File(...)) -> Dict[str, Any]:
+async def predict(
+    background_tasks: BackgroundTasks,
+    file: UploadFile = File(...),
+) -> Dict[str, Any]:
     if MODEL is None or not CLASS_NAMES:
         raise HTTPException(status_code=503, detail="Model not loaded. Check checkpoint and class_mapping paths.")
 
@@ -91,19 +198,48 @@ async def predict(file: UploadFile = File(...)) -> Dict[str, Any]:
         raise HTTPException(status_code=415, detail="Upload a JPEG or PNG image")
 
     try:
-        img = Image.open(file.file).convert("RGB")
+        image_bytes = await file.read()
+        img = Image.open(BytesIO(image_bytes)).convert("RGB")
     except Exception as e:
         raise HTTPException(status_code=400, detail=f"Could not read image: {e}")
 
-    x = TRANSFORM(img).unsqueeze(0).to(DEVICE)
+    # Engineered features on raw image
+    brightness, contrast, sharpness = _image_quality_features(img)
+
+    # Post-transform features (normalized space)
+    x_cpu = TRANSFORM(img)  # [3,224,224] on CPU
+    ch_mean = x_cpu.mean(dim=(1, 2)).tolist()
+    ch_std = x_cpu.std(dim=(1, 2)).tolist()
+
+    # Inference tensor (same transform, then batch + device)
+    x = x_cpu.unsqueeze(0).to(DEVICE)
 
     with torch.no_grad():
         logits = MODEL(x)
         probs = torch.softmax(logits, dim=1).squeeze(0)
         pred = int(torch.argmax(probs).item())
+        confidence = float(probs[pred].item())
+
+    pred_label = CLASS_NAMES[pred]
+
+    # Background logging (does not block response)
+    background_tasks.add_task(
+        _log_request_to_csv,
+        image_bytes=image_bytes,
+        filename=file.filename or "",
+        content_type=file.content_type or "",
+        pred_idx=pred,
+        pred_label=pred_label,
+        confidence=confidence,
+        ch_mean=ch_mean,
+        ch_std=ch_std,
+        brightness=brightness,
+        contrast=contrast,
+        sharpness=sharpness,
+    )
 
     return {
         "pred_class": pred,
-        "pred_label": CLASS_NAMES[pred],
+        "pred_label": pred_label,
         "probs": {CLASS_NAMES[i]: float(probs[i]) for i in range(len(CLASS_NAMES))},
     }

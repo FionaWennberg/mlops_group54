@@ -248,7 +248,7 @@ will check the repositories and the code to verify your answers.
 >
 > Answer:
 
---- question 9 fill here ---
+--- We made use of both branches and pull requests in our project, as this makes it possible to work in parallel to each other on the same project from multiple computers. Each team member had their own branch/branches and committed changes to these, which were then merged to the main branch in GitHub. When comflicts arose, the team agreed upon which changes to keep. Working with branches is both efficient and increases the safety of the main branch, as nothing is comitted before tests are run and conflicts resolved. ---
 
 ### Question 10
 
@@ -280,7 +280,7 @@ will check the repositories and the code to verify your answers.
 >
 > Answer:
 
---- question 11 fill here ---
+--- Our continuous integration setup consists of multiple components being tested at every pull request to main branch. Firstly, code is checked for linting to ensure good code structure. unittesting some of the key code components, linting to ensure proper code structure and testing the functionality of the API.  ---
 
 ## Running code and tracking experiments
 
@@ -299,7 +299,7 @@ will check the repositories and the code to verify your answers.
 >
 > Answer:
 
---- question 12 fill here ---
+--- To configure our experiments, we made use of Hydra config files in .yaml format. These are used to control parameters that affect the setup of the experiment, such as batch size, learnig rate, epochs among others. The aim was to keep every parameter that later could be changed out of the source code and keep these in the configuration files. The config files were divided into structured config sections for data, model, training and evaluation. An experiment can for example be run by: uv run python -m mlops_group54_project.evaluate, with optional terminal overrides. For example, overrides were made when testing out training with fewer epochs and smaller batch_sizes. ---
 
 ### Question 13
 
