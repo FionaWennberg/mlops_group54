@@ -3,7 +3,7 @@ data:
   test_dir: data/Raw_data/brain-tumor-mri/Testing
   processed_dir: data/processed
   image_size: 224
-  num_workers: 4
+  num_workers: 1
   preprocess_batch_size: 64
 model:
   backbone: resnet50
