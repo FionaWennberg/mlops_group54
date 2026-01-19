@@ -200,5 +200,6 @@ data/processed/
 .hydra/
 
 # Dont commit trained model
-models/*
+models/
 !models/.gitkeep
+/models
