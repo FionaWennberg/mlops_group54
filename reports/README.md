@@ -128,13 +128,10 @@ will check the repositories and the code to verify your answers.
 ### Question 2
 > **Enter the study number for each member in the group**
 >
-> Example:
->
-> *sXXXXXX, sXXXXXX, sXXXXXX*
 >
 > Answer:
 
---- question 2 fill here ---
+*s223643, s246024, s245290, s244322*
 
 ### Question 3
 > **Did you end up using any open-source frameworks/packages not covered in the course during your project? If so**
@@ -263,7 +260,7 @@ will check the repositories and the code to verify your answers.
 >
 > Answer:
 
---- question 10 fill here ---
+--- We used DVC to manage data by storing both raw and processed datasets in a Google Cloud Storage bucket. This allowed us to version large data files without committing them to the git repository. We did not version control the data, but if we had we would have done it after each change to the data, such as modifying preprocessing steps, filtering samples, or changing the train–test split, as that would result in a new data version. This would have allowed us to reproduce earlier experiments by checking out an older commit and pulling the corresponding data version. ---
 
 ### Question 11
 
