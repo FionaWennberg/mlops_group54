@@ -181,7 +181,7 @@ will check the repositories and the code to verify your answers.
 >
 > Answer:
 
---- question 5 fill here ---
+--- We initialized our project using the provided MLOps cookiecutter template, which gives a standardized structure for managing machine learning projects. We kept this template and structure largely intact and did not remove any majo folders. We filled out the data folder with our raw and preprocessed data and added our the necessary files to the source code (src). As seen we extenden the folder to fit our case. Some examples include: integrated experiment tracking and model versioning using DVC and WandB, which resulted in additional files such as models.dvc and logging outputs. Furthermore, we also added integrationstest of our API setup in the testing folder. A monitoring folder was added to the data folder to implement monitoring of data drift. And so on.  ---
 
 ### Question 6
 
@@ -215,7 +215,7 @@ will check the repositories and the code to verify your answers.
 >
 > Answer:
 
---- In our continuous integration workflow we are testing multiple aspects of our project. We implemented unit test for the data processing and the model, primarily to remove bugs before merging changes to the main branch. The API's functionality was also tested through integrations testing. However, to increase the speed of the test, it was mocked using monkeypatch.  ---
+--- In our continuous integration workflow we are testing multiple aspects of our project. We implemented unit tests for the data processing and the model, primarily to remove bugs and check the logic of the code before merging changes to the main branch. The API's functionality was also tested through integrations testing. However, to increase the speed of the test, it was mocked using monkeypatch.  ---
 
 ### Question 8
 
@@ -230,9 +230,7 @@ will check the repositories and the code to verify your answers.
 >
 > Answer:
 
---- question 8 fill here ---
-
-### Question 9
+--- The totalt code coverage for our 3 main tests was as followed: model.py had a 91 % code coverage. data.py had a 94 % code coverage and the api.py had a 80  % coverage. Even with a code coverage close to 100%, we would not consider the code to be error free. Code coverage only indicates that lines of code were executed, not that the implemented logic is correct in all situations. Yes high code coverage is a good sign, but bugs related to incorrect assumptions about data, mismatches between model, data, and API components can still exist despite the high code coverage.---
 
 > **Did you workflow include using branches and pull requests? If yes, explain how. If not, explain how branches and**
 > **pull request can help improve version control.**
@@ -277,7 +275,12 @@ will check the repositories and the code to verify your answers.
 >
 > Answer:
 
---- Our continuous integration setup consists of multiple components being tested at every pull request to main branch. Firstly, code is checked for linting to ensure good code structure. unittesting some of the key code components, linting to ensure proper code structure and testing the functionality of the API.  ---
+--- Our continuous integration run two main CI workflows on every push and pull request to the main branch: linting and unit testing (including integrationsttest for the API). The linting workflow (linting.yaml) ensures code quality by running Ruff. This is to catch issues like an unused imports/variables, and to verify consistent formatting across both source code and tests. Our unit test workflow (tests.yaml) runs pytest together with coverage. We are testing across 3 operating systems (ubuntu-latest, windows-latest, and macos-latest) and 2 Python versions (3.11 and 3.12). This results in 6 separate CI jobs, each installing dependencies with uv, installing the project in editable mode, and running: 
+- coverage run -m pytest tests/
+- coverage report -m
+This runs the test and we recieve the code coverage report.
+This setup helps us find platform-specific issues and Python version compatibility problems early. Dependencies are installed using "uv sync --dev", making sure that the CI environment is consistent with our own local development setup. We use separate workflows to keep responsibilities clear: linting focuses on code style and formatting, while the test workflow runs tests and reports code coverage.
+https://github.com/FionaWennberg/mlops_group54/actions/workflows/tests.yaml this one? ---
 
 ## Running code and tracking experiments
 
@@ -311,7 +314,9 @@ will check the repositories and the code to verify your answers.
 >
 > Answer:
 
---- question 13 fill here ---
+--- We made use of config files to ensure reproducibility of our experiments. Whenever an experiment is run, the complete experimental setup is defined through the Hydra YAML config files, including parameters for data handling, model architecture, training, and evaluation and etc. This means that no parameters are hard-coded in the source code, and all changes between experiments are only controlled through the config files or command-line overrides. Hydra automatically resolves and stores the final configuration used for each run as a folder (.hydra), making it possible to see exactly which parameters were applied. in addition to using configu files, we ensured reproducibility by managing dependencies consistently. All dependencies are installed using uv, which helps ensure that the same package versions are used across different environments and in CI. We also use DVC to version data and model artifacts, making it possible to retrieve the exact dataset and model versions used in a given experiment. 
+
+To reproduce an experiment, one would check out the relevant Git commit, restore the corresponding data and model artifacts using DVC, and rerun the experiment using the same Hydra configuration files and command-line overrides. This way the experiments can be reproduced at a later time under the exact same conditions . ---
 
 ### Question 14
 
