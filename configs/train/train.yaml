@@ -5,3 +5,11 @@ weight_decay: 0.0001
 
 output_dir: models
 checkpoint_name: model.pth
+
+wandb:
+  enabled: true
+  project: "mlops_group54_project"
+  entity: s246024-danmarks-tekniske-universitet-dtu
+  run_name: null
+  tags: ["train"]
+  log_every_n_steps: 20
