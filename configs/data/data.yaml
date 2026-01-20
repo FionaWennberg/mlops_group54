@@ -2,5 +2,5 @@ train_dir: data/Raw_data/brain-tumor-mri/Training
 test_dir: data/Raw_data/brain-tumor-mri/Testing
 processed_dir: data/processed
 image_size: 224
-num_workers: 1
+num_workers: 4
 preprocess_batch_size: 64
