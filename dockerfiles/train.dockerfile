@@ -21,4 +21,4 @@ ENV PYTHONUNBUFFERED=1
 
 RUN uv sync --locked --no-cache --no-install-project
 
-ENTRYPOINT ["uv", "run", "src/mlops_group54_project/train.py"]
+ENTRYPOINT ["bash", "-lc", "dvc pull data/processed && uv run src/mlops_group54_project/train.py"]

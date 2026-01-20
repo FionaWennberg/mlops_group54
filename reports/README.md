@@ -400,7 +400,8 @@ Here you can find the dockerfile for the training: https://github.com/FionaWennb
 >
 > Answer:
 
---- question 19 fill here ---
+![Buckets](image.png)
+
 
 ### Question 20
 
@@ -409,7 +410,7 @@ Here you can find the dockerfile for the training: https://github.com/FionaWennb
 >
 > Answer:
 
---- question 20 fill here ---
+![Artifact](image-1.png)
 
 ### Question 21
 
@@ -418,7 +419,7 @@ Here you can find the dockerfile for the training: https://github.com/FionaWennb
 >
 > Answer:
 
---- question 21 fill here ---
+![Google Cloud Build](image-2.png)
 
 ### Question 22
 
@@ -433,7 +434,7 @@ Here you can find the dockerfile for the training: https://github.com/FionaWennb
 >
 > Answer:
 
---- question 22 fill here ---
+--- We trained our model in the cloud using the Engine with a VM instance as described in question 18. The reason as to why we chose the engine was because ---
 
 ## Deployment
 
