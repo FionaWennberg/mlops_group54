@@ -5,6 +5,6 @@ batch_size: 32
 wandb:
   enabled: true
   project: mlops_group54_project
-  entity: null        # set to your W&B username or team, or keep null
+  entity: s246024-danmarks-tekniske-universitet-dtu   # set to your W&B username or team, or keep null
   run_name: null      # optional, e.g. "eval-resnet50"
   tags: ["eval"]
