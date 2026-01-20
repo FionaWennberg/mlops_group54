@@ -343,7 +343,8 @@ will check the repositories and the code to verify your answers.
 >
 > Answer:
 
---- question 15 fill here ---
+--- We created two docker images, one for serving prediction via a FastAPI application and one for model training. The images were built using dedicated Dockerfiles and are stored in the in the Google Cloud Artifact Registry (europe-west1-docker.pkg.dev/mlops2026-484211/mlopsgroup54/).
+Here you can find the dockerfile for the training: https://github.com/FionaWennberg/mlops_group54/blob/main/dockerfiles/train.dockerfile ---
 
 ### Question 16
 
@@ -375,7 +376,7 @@ will check the repositories and the code to verify your answers.
 >
 > Answer:
 
---- question 17 fill here ---
+--- Compute Engine is used to create and run virtual machines. We used it specifically to train our model with a VM instance. We also used Google Cloud Storage in order to store large artifacts such as the raw data, processed data, and the trained model files. This was essential because our git repository did not have the capacity to commit these large files. Artifact Registry is used for storing Docker images for both the training pipeline and the inference API so they can be versioned and reused across environments. ---
 
 ### Question 18
 
@@ -390,7 +391,7 @@ will check the repositories and the code to verify your answers.
 >
 > Answer:
 
---- question 18 fill here ---
+--- We used with the Compute Engine a VM instance to train our ResNet50 model. As it is heavy for a computer to train a deep learning model such as ours, it requires sufficient memory as well as disk space, which makes GCP resources more suitable than local machines. We chose boot-disk-size to be 50 GB, so that it could handle large dependicies, cached model weights and training artificats. The training job pulled processed data from a Google Cloud Storage bucket. We chose a e2-standard-4 machine type as it provides 16 GB of memory which is most suitable for our dataset. The instance was deployed in the europe-west1-b as our zone to minimize latency. ---
 
 ### Question 19
 
