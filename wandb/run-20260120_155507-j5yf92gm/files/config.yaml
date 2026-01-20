@@ -1,0 +1,70 @@
+_wandb:
+    value:
+        cli_version: 0.23.1
+        e:
+            ejnj3tye8j6tbfi7a92ex7gwum5i5d98:
+                args:
+                    - train.epochs=3
+                    - train.batch_size=4
+                cpu_count: 16
+                cpu_count_logical: 22
+                disk:
+                    /:
+                        total: "509722226688"
+                        used: "273107685376"
+                email: s246024@dtu.dk
+                executable: C:\Users\fiviw\mlops_group54\.venv\Scripts\python.exe
+                git:
+                    commit: b2b0c1f47b9efc155098a2891485969f3cc8604d
+                    remote: https://github.com/FionaWennberg/mlops_group54.git
+                host: Fionas_yoga
+                memory:
+                    total: "16573128704"
+                os: Windows-10-10.0.26200-SP0
+                program: -m mlops_group54_project.train
+                python: CPython 3.11.9
+                root: C:\Users\fiviw\mlops_group54
+                startedAt: "2026-01-20T14:55:07.532172Z"
+                writerId: ejnj3tye8j6tbfi7a92ex7gwum5i5d98
+        m: []
+        python_version: 3.11.9
+        t:
+            "1":
+                - 1
+                - 41
+                - 50
+                - 105
+            "2":
+                - 1
+                - 41
+                - 50
+                - 105
+            "3":
+                - 15
+                - 16
+                - 61
+            "4": 3.11.9
+            "5": 0.23.1
+            "8":
+                - 3
+            "12": 0.23.1
+            "13": windows-amd64
+data:
+    value:
+        batch_size: 4
+        num_workers: 4
+        processed_dir: data/processed
+model:
+    value:
+        backbone: resnet50
+        dropout: 0
+        num_classes: 4
+        pretrained: true
+train:
+    value:
+        checkpoint_name: model.pth
+        epochs: 3
+        log_every_n_steps: 20
+        lr: 0.0003
+        output_dir: models
+        weight_decay: 0.0001
