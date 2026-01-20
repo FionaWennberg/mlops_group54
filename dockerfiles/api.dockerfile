@@ -4,7 +4,7 @@ COPY uv.lock uv.lock
 COPY README.md README.md
 COPY pyproject.toml pyproject.toml
 
-RUN uv sync --frozen --no-install-project
+RUN uv sync --frozen
 
 COPY src src/
 

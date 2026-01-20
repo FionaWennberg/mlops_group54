@@ -19,6 +19,6 @@ COPY data/ data/
 ENV PYTHONUNBUFFERED=1
 
 
-RUN uv sync --locked --no-cache --no-install-project
+RUN uv sync --locked --no-cache
 
 ENTRYPOINT ["bash", "-lc", "dvc pull data/processed && uv run src/mlops_group54_project/train.py"]
