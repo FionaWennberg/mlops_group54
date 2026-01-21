@@ -1,11 +1,10 @@
 FROM ghcr.io/astral-sh/uv:python3.12-bookworm-slim
 
 RUN apt update && \
-    apt install --no-install-recommends -y build-essential gcc && \
+    apt install --no-install-recommends -y build-essential gcc git ca-certificates&& \
     apt clean && rm -rf /var/lib/apt/lists/*
 
 WORKDIR /app
-RUN mkdir -p models reports/figures
 
 COPY uv.lock uv.lock
 COPY pyproject.toml pyproject.toml
