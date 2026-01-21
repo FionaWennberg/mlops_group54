@@ -16,6 +16,7 @@ COPY .dvc/ .dvc/
 COPY .dvcignore .dvcignore
 
 ENV PYTHONUNBUFFERED=1
+ENV DVC_NO_SCM=1
 
 RUN uv sync --locked --no-cache --no-install-project
 
