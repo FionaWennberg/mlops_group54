@@ -18,4 +18,4 @@ ENV PYTHONUNBUFFERED=1
 
 RUN uv sync --locked --no-cache
 
-ENTRYPOINT ["bash", "-lc", "dvc pull models/model.pth && uv run src/mlops_group54_project/evaluate.py"]
+ENTRYPOINT ["bash", "-lc", "uv run dvc pull models/model.pth && uv run src/mlops_group54_project/evaluate.py"]
