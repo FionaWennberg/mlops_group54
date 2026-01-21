@@ -15,6 +15,8 @@ COPY LICENSE LICENSE
 COPY src/ src/
 COPY configs/ configs/
 COPY data/ data/
+COPY .dvc/ .dvc/
+COPY .dvcignore .dvcignore
 
 ENV PYTHONUNBUFFERED=1
 

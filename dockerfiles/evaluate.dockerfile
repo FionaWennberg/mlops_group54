@@ -13,6 +13,8 @@ COPY README.md README.md
 COPY LICENSE LICENSE
 COPY src/ src/
 COPY configs/ configs/
+COPY .dvc/ .dvc/
+COPY .dvcignore .dvcignore
 
 ENV PYTHONUNBUFFERED=1
 
