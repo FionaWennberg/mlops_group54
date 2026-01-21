@@ -17,6 +17,6 @@ COPY .dvcignore .dvcignore
 
 ENV PYTHONUNBUFFERED=1
 
-RUN uv sync --locked --no-cache
+RUN uv sync --locked --no-cache --no-install-project
 
 ENTRYPOINT ["bash", "-lc", "uv run dvc pull models/model.pth && uv run src/mlops_group54_project/evaluate.py"]
