@@ -1,11 +1,9 @@
-FROM ghcr.io/astral-sh/uv:python3.11-alpine
+FROM ghcr.io/astral-sh/uv:python3.12-bookworm-slim
 
-RUN apk add --no-cache \
-    bash \
-    git \
-    build-base \
-    gcc \
-    musl-dev
+
+RUN apt update && \
+    apt install --no-install-recommends -y build-essential gcc git ca-certificates&& \
+    apt clean && rm -rf /var/lib/apt/lists/*
 
 WORKDIR /app
 
