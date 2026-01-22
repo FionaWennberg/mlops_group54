@@ -333,7 +333,16 @@ To reproduce an experiment, one would check out the relevant Git commit, restore
 >
 > Answer:
 
---- Looking at the attached images, we have used W&B to log our training and evaluation. The training is used to observe how the model learns throughtout he training looking at how its loss and accuracy evolves. ---
+--- 
+![Evaluation table](evaluation_table1.png)
+
+![Training curve](training_curve.png)
+
+![Logging Artifacts](logging_artifacts.png)
+
+Looking at the attached images, we have used W&B to log our training and evaluation. The training is used to observe how the model learns throughout the training looking at how its loss and accuracy evolves. In overall terms, tracking the evaluation gives an overview of the performance in a table showing the predictions and the true labels, which provides a detailed view of the model and it's applicability. 
+
+Looking at our results it can be seen that the training curve converges nicely and the model is learning as the loss is decreasing and accuracy increasing. However, it is more important to look at the validation in between epochs, which shows a higher loss and lower accuracy and also a higher variation. This shows signs of overfitting to the training data, which is a likely cause for why the model struggles in generalising well to unseen data. However, when looking at the overall accuracy of the evaluation run, the model has an accuracy of 77,9% which is quite okay. On the contrary, there are large differences in the per class accuracies, where class 2 has an accuracy of 100% and class 0 has 24%, which can partially be explained by an uneven distribution of data. For fairness, it must be noted that due to constraints in available data, the data used for validation in the training was from the same folder of testing images, as the images in the evaluation, as we did not have a seperate testing and validation data set. In addition, W&B can be used to track artifacts of runs, which is useful for keeping a good structured overview of model, configuration and performance all together. ---
 
 ### Question 15
 
