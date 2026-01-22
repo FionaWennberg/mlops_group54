@@ -14,6 +14,8 @@ COPY src/ src/
 COPY configs/ configs/
 COPY .dvc/ .dvc/
 COPY .dvcignore .dvcignore
+COPY models.dvc models.dvc
+COPY data/processed.dvc data/processed.dvc
 
 ENV PYTHONUNBUFFERED=1
 
