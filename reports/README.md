@@ -364,7 +364,7 @@ Here you can find the dockerfile for the training: https://github.com/FionaWennb
 >
 > Answer:
 
---- question 16 fill here ---
+--- During development of our project, some group members mainly used printing/logging while others used a more trial and error procedure in the terminal. In a few cases, we also used the VS Code debugger to step through the code and inspect variables when debugging more complex issues, such as model loading and FastAPI request handling. Since different group members worked on different parts of the codebase, the exact debugging method varied of course, but all methods seemed to solve the issues if present. We did not perform extensive profiling of our code. The main reason for this was that our workloads were relatively small, with limited data sizes, meaning performance bottlenecks were not a major concern. Instead, our focus was on correctness, reproducibility, and robustness of the pipeline. ---
 
 ## Working in the cloud
 
