@@ -24,4 +24,4 @@ ENV PYTHONUNBUFFERED=1
 RUN uv sync --locked --no-cache
 
 
-ENTRYPOINT ["bash", "-lc", "/app/.venv/bin/python -m dvc config core.no_scm True && /app/.venv/bin/python -m dvc pull models/model.pth && /app/.venv/bin/python -m dvc pull data/processed && /app/.venv/bin/python -m uvicorn src.mlops_group54_project.api:app --host 0.0.0.0 --port 8000"]
+ENTRYPOINT ["bash", "-lc", "/app/.venv/bin/python -m dvc config core.no_scm True && /app/.venv/bin/python -m dvc pull models/model.pth && /app/.venv/bin/python -m dvc pull data/processed && /app/.venv/bin/python -m uvicorn src.mlops_group54_project.api:app --host 0.0.0.0 --port 8080"]
