@@ -333,14 +333,14 @@ To reproduce an experiment, one would check out the relevant Git commit, restore
 >
 > Answer:
 
---- 
+---
 ![Evaluation table](evaluation_table1.png)
 
 ![Training curve](training_curve.png)
 
 ![Logging Artifacts](logging_artifacts.png)
 
-Looking at the attached images, we have used W&B to log our training and evaluation. The training is used to observe how the model learns throughout the training looking at how its loss and accuracy evolves. In overall terms, tracking the evaluation gives an overview of the performance in a table showing the predictions and the true labels, which provides a detailed view of the model and it's applicability. 
+Looking at the attached images, we have used W&B to log our training and evaluation. The training is used to observe how the model learns throughout the training looking at how its loss and accuracy evolves. In overall terms, tracking the evaluation gives an overview of the performance in a table showing the predictions and the true labels, which provides a detailed view of the model and it's applicability.
 
 Looking at our results it can be seen that the training curve converges nicely and the model is learning as the loss is decreasing and accuracy increasing. However, it is more important to look at the validation in between epochs, which shows a higher loss and lower accuracy and also a higher variation. This shows signs of overfitting to the training data, which is a likely cause for why the model struggles in generalising well to unseen data. However, when looking at the overall accuracy of the evaluation run, the model has an accuracy of 77,9% which is quite okay. On the contrary, there are large differences in the per class accuracies, where class 2 has an accuracy of 100% and class 0 has 24%, which can partially be explained by an uneven distribution of data. For fairness, it must be noted that due to constraints in available data, the data used for validation in the training was from the same folder of testing images, as the images in the evaluation, as we did not have a seperate testing and validation data set. In addition, W&B can be used to track artifacts of runs, which is useful for keeping a good structured overview of model, configuration and performance all together. ---
 
@@ -483,7 +483,7 @@ The bucket contains separate prefixes for raw data, processed data, trained mode
 >
 > Answer:
 
---- We did deploy our API, using the docker image in a VM instance were it deployed the results in our Google Storage Bucket under monitoring. ---
+--- We did deploy our API, using the docker image in a VM instance were it deployed the results in our Google Storage Bucket under monitoring. Skriver videre på det i morgen. ---
 
 ### Question 25
 
@@ -498,7 +498,7 @@ The bucket contains separate prefixes for raw data, processed data, trained mode
 >
 > Answer:
 
---- We implemented an integrationstest for the API. Here we tested the API’s end-to-end endpoint behavior and that the health endpoint responds correctly, /predict accepts valid image uploads and returns the expected output, and that invalid content types or corrupted image data are rejected with proper errors. We did not perform load testing, but we would follow the approach with using Locust. First, we would start the API locally and define an environment variable such as "MYENDPOINT=http://localhost:8000" or similar. Next, we would add a tests/performancetests/locustfile.py that simulates many users calling GET / and POST /predict. Finally, we would run Locust and report metrics such as average latency, p99 latency, requests/sec, and error rate while increasing concurrency to find the services capacity and bottlenecks. ---
+--- We implemented an integrationstest for the API. Here we tested the API’s end-to-end endpoint behavior and that the health endpoint responds correctly, /predict accepts valid image uploads and returns the expected output, and that invalid content types or corrupted image data are rejected with proper errors. We did not perform load testing, but we would follow the approach with using Locust. First, we would start the API locally and define an environment variable such as "MYENDPOINT=http://localhost:8080" or similar. Next, we would add a tests/performancetests/locustfile.py that simulates many users calling GET / and POST /predict. Finally, we would run Locust and report metrics such as average latency, p99 latency, requests/sec, and error rate while increasing concurrency to find the services capacity and bottlenecks. ---
 
 ### Question 26
 
@@ -579,7 +579,7 @@ The bucket contains separate prefixes for raw data, processed data, trained mode
 >
 > Answer:
 
---- The overall biggest struggles in our project were related to deploying and operating the system in a cloud environment rather than developing the machine learning model itself. While model training, preprocessing, and local experimentation were relatively straightforward, a significant amount of time was spent understanding how the different cloud components fit together and how to operate this. One major challenge was integrating Docker with Google Cloud. Building container images that worked consistently both locally and in the cloud required careful handling of dependencies, file paths, and so on. Small mismatches between the local development environment and the Cloud Run execution environment often led to runtime errors that were difficult to solve for us. Related to this, it was sometimes unclear what code should live inside the container versus what should be handled by external cloud services, which slowed us down significantly. Another big challenge was deploying and implementing our FastAPI application in the cloud. While the API worked locally, getting it to run reliably on Cloud Run required much more work and understanding of container networking, environment variables, stateless execution, and logging. Similarly, implementing alerting and monitoring systems in GCP proved to be more diffcicult than expected, as it involved multiple services (Cloud Monitoring, alert policies, metrics) with not so much prior knowledge of how this works. 
+--- The overall biggest struggles in our project were related to deploying and operating the system in a cloud environment rather than developing the machine learning model itself. While model training, preprocessing, and local experimentation were relatively straightforward, a significant amount of time was spent understanding how the different cloud components fit together and how to operate this. One major challenge was integrating Docker with Google Cloud. Building container images that worked consistently both locally and in the cloud required careful handling of dependencies, file paths, and so on. Small mismatches between the local development environment and the Cloud Run execution environment often led to runtime errors that were difficult to solve for us. Related to this, it was sometimes unclear what code should live inside the container versus what should be handled by external cloud services, which slowed us down significantly. Another big challenge was deploying and implementing our FastAPI application in the cloud. While the API worked locally, getting it to run reliably on Cloud Run required much more work and understanding of container networking, environment variables, stateless execution, and logging. Similarly, implementing alerting and monitoring systems in GCP proved to be more diffcicult than expected, as it involved multiple services (Cloud Monitoring, alert policies, metrics) with not so much prior knowledge of how this works.
 Overall, most of our time was spent understanding cloud setup, configuration, and deployment rather than working on the machine learning model itself. We handled these challenges mainly through trial and error, adding logging and print statements, and repeatedly testing small changes both locally and in the cloud. We also relied very much on documentation and examples from the course material to understand how different components were expected to work together and for guiding us through different problems.
  ---
 
