@@ -131,7 +131,6 @@ def test_build_model_smoke_forward_shape_with_mock(monkeypatch, num_classes):
             super().__init__(in_features=in_features)
 
         def forward(self, x):
-            
             b = x.shape[0]
             feats = torch.zeros(b, self.fc.in_features)
             return self.fc(feats)
