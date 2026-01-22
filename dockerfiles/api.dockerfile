@@ -17,12 +17,9 @@ COPY configs/ configs/
 COPY models.dvc models.dvc
 COPY data/processed.dvc data/processed.dvc
 
-
-RUN uv sync --frozen --no-install-project
-
 COPY src src/
 
-RUN uv sync --frozen
+RUN uv sync --locked --no-cache
 
 ENV PYTHONUNBUFFERED=1
 
