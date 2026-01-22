@@ -144,8 +144,11 @@ will check the repositories and the code to verify your answers.
 > *package to do ... and ... in our project*.
 >
 > Answer:
+Yes, we used the open-source library Pillow (imported as from PIL import Image), which was not a central part of the project but was used specifically for testing. Pillow is only used in one test to create a small, valid image file on disk.
+In this test, we construct a minimal image folder structure that mimics a real dataset setup. Using Pillow, we generate a tiny JPEG image (8×8 pixels) and save it to the correct directory. This allows our dataset code to load an actual image file instead of an empty or fake file. As a result, we can test the dataset construction end-to-end in a realistic way.
 
---- question 3 fill here ---
+
+
 
 ## Coding environment
 
@@ -349,7 +352,19 @@ To reproduce an experiment, one would check out the relevant Git commit, restore
 > Answer:
 
 --- We created two docker images, one for serving prediction via a FastAPI application and one for model training. The images were built using dedicated Dockerfiles and are stored in the in the Google Cloud Artifact Registry (europe-west1-docker.pkg.dev/mlops2026-484211/mlopsgroup54/).
-Here you can find the dockerfile for the training: https://github.com/FionaWennberg/mlops_group54/blob/main/dockerfiles/train.dockerfile ---
+Here you can find the dockerfile for the training: https://github.com/FionaWennberg/mlops_group54/blob/main/dockerfiles/train.dockerfile 
+
+Docker was used to ensure reproducibility and consistent environments across local development.
+We created two docker images, one for serving prediction via a FastAPI application and one for model training. The images were built using dedicated Dockerfiles and are stored in the Google Cloud Artifact Registry (europe-west1-docker.pkg.dev/mlops2026-484211/mlopsgroup54/). To run the model training we ran docker run mlopsgroup54/train:latest, and
+
+The training image can be run using:
+docker run --rm mlopsgroup54/train:latest
+
+The serving image can be run using:
+docker run -p 8000:8000 mlopsgroup54/serve:latest
+
+
+---
 
 ### Question 16
 
@@ -553,8 +568,12 @@ Here you can find the dockerfile for the training: https://github.com/FionaWennb
 > *Whenever we commit code and push to GitHub, it auto triggers ... and ... . From there the diagram shows ...*
 >
 > Answer:
-
---- question 29 fill here ---
+The pipeline starts from a local development machine, where the project repository is cloned from GitHub. The repository contains the preprocessing and training code, Hydra configuration files, Dockerfiles, and DVC metadata files, all version controlled using Git. Pipeline execution is initiated locally by running Docker, which launches docker containers with preprocessing and training.
+The dataset originally originates from Kaggle and is stored in Google Cloud Storage, where the data files are physically located. DVC is used to track and version the dataset and all derived artifacts, while only the corresponding .dvc files are committed to the Git repository.
+During execution, Hydra is responsible for loading and applying a specific set of configuration files that define data paths, preprocessing parameters, model settings, and training hyperparameters. This ensures that each run is executed with an explicit and reproducible configuration.
+The raw dataset is stored in Google Cloud Storage and tracked using DVC. When the preprocessing container is executed, the raw dataset stored in Google Cloud Storage is made available locally through DVC and transformed into processed data, which is then stored back in Google Cloud Storage and tracked as a new DVC version.
+The processed data is then used as input to the training step. The training container consumes the processed dataset together with the Hydra configuration and produces a trained model. The trained model is stored in Google Cloud Storage and versioned using DVC, enabling reproducibility and traceability across experiments.
+![alt text](image-3.png)
 
 ### Question 30
 
