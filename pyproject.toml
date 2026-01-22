@@ -37,6 +37,7 @@ dependencies = [
     "pandas>=2.3.3",
     "dvc[gs]>=3.66.1",
     "pathspec==0.11.2",
+    "locust>=2.43.1",
 ]
 
 [dependency-groups]

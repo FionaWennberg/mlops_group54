@@ -17,7 +17,7 @@ class DummyResNet(nn.Module):
 
     def __init__(self, in_features: int = 2048):
         super().__init__()
-        self.fc = nn.Linear(in_features, 1000)  # placeholder
+        self.fc = nn.Linear(in_features, 1000)  # this is just plaeholder
 
 
 def test_build_model_raises_on_unsupported_backbone():
@@ -94,7 +94,7 @@ def test_build_model_fallback_on_old_torchvision_api(monkeypatch):
 
 
 def test_to_model_config_reads_fields_and_defaults():
-    # matches your configs/model/model.yaml keys
+    # matches our configs/model/model.yaml keys
     cfg = OmegaConf.create(
         {
             "model": {
@@ -131,7 +131,7 @@ def test_build_model_smoke_forward_shape_with_mock(monkeypatch, num_classes):
             super().__init__(in_features=in_features)
 
         def forward(self, x):
-            # x: [B, 3, H, W] -> simple pooled feature: [B, in_features]
+            
             b = x.shape[0]
             feats = torch.zeros(b, self.fc.in_features)
             return self.fc(feats)
