@@ -458,7 +458,7 @@ The bucket contains separate prefixes for raw data, processed data, trained mode
 >
 > Answer:
 
---- question 23 fill here ---
+--- HERE ---
 
 ### Question 24
 
@@ -474,7 +474,7 @@ The bucket contains separate prefixes for raw data, processed data, trained mode
 >
 > Answer:
 
---- question 24 fill here ---
+--- We did deploy our API, using the docker image in a VM instance were it deployed the results in our Google Storage Bucket under monitoring.  ---
 
 ### Question 25
 
