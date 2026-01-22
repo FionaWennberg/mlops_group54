@@ -62,49 +62,49 @@ will check the repositories and the code to verify your answers.
     `pyproject.toml`/`uv.lock` up-to-date with whatever dependencies that you are using (M2+M6)
 * [ ] Remember to comply with good coding practices (`pep8`) while doing the project (M7)
 * [ ] Do a bit of code typing and remember to document essential parts of your code (M7)
-* [ ] Setup version control for your data or part of your data (M8)
+* [x] Setup version control for your data or part of your data (M8)
 * [ ] Add command line interfaces and project commands to your code where it makes sense (M9)
-* [ ] Construct one or multiple docker files for your code (M10)
-* [ ] Build the docker files locally and make sure they work as intended (M10)
-* [ ] Write one or multiple configurations files for your experiments (M11)
-* [ ] Used Hydra to load the configurations and manage your hyperparameters (M11)
+* [x] Construct one or multiple docker files for your code (M10)
+* [x] Build the docker files locally and make sure they work as intended (M10)
+* [x] Write one or multiple configurations files for your experiments (M11)
+* [x] Used Hydra to load the configurations and manage your hyperparameters (M11)
 * [ ] Use profiling to optimize your code (M12)
-* [ ] Use logging to log important events in your code (M14)
-* [ ] Use Weights & Biases to log training progress and other important metrics/artifacts in your code (M14)
+* [x] Use logging to log important events in your code (M14)
+* [x] Use Weights & Biases to log training progress and other important metrics/artifacts in your code (M14)
 * [ ] Consider running a hyperparameter optimization sweep (M14)
 * [ ] Use PyTorch-lightning (if applicable) to reduce the amount of boilerplate in your code (M15)
 
 ### Week 2
 
-* [ ] Write unit tests related to the data part of your code (M16)
-* [ ] Write unit tests related to model construction and or model training (M16)
-* [ ] Calculate the code coverage (M16)
-* [ ] Get some continuous integration running on the GitHub repository (M17)
-* [ ] Add caching and multi-os/python/pytorch testing to your continuous integration (M17)
-* [ ] Add a linting step to your continuous integration (M17)
-* [ ] Add pre-commit hooks to your version control setup (M18)
+* [x] Write unit tests related to the data part of your code (M16)
+* [x] Write unit tests related to model construction and or model training (M16)
+* [x] Calculate the code coverage (M16)
+* [x] Get some continuous integration running on the GitHub repository (M17)
+* [x] Add caching and multi-os/python/pytorch testing to your continuous integration (M17)
+* [x] Add a linting step to your continuous integration (M17)
+* [x] Add pre-commit hooks to your version control setup (M18)
 * [ ] Add a continues workflow that triggers when data changes (M19)
 * [ ] Add a continues workflow that triggers when changes to the model registry is made (M19)
-* [ ] Create a data storage in GCP Bucket for your data and link this with your data version control setup (M21)
-* [ ] Create a trigger workflow for automatically building your docker images (M21)
-* [ ] Get your model training in GCP using either the Engine or Vertex AI (M21)
-* [ ] Create a FastAPI application that can do inference using your model (M22)
+* [x] Create a data storage in GCP Bucket for your data and link this with your data version control setup (M21)
+* [x] Create a trigger workflow for automatically building your docker images (M21)
+* [x] Get your model training in GCP using either the Engine or Vertex AI (M21)
+* [x] Create a FastAPI application that can do inference using your model (M22)
 * [ ] Deploy your model in GCP using either Functions or Run as the backend (M23)
-* [ ] Write API tests for your application and setup continues integration for these (M24)
+* [x] Write API tests for your application and setup continues integration for these (M24)
 * [ ] Load test your application (M24)
 * [ ] Create a more specialized ML-deployment API using either ONNX or BentoML, or both (M25)
 * [ ] Create a frontend for your API (M26)
 
 ### Week 3
 
-* [ ] Check how robust your model is towards data drifting (M27)
-* [ ] Setup collection of input-output data from your deployed application (M27)
+* [x] Check how robust your model is towards data drifting (M27)
+* [x] Setup collection of input-output data from your deployed application (M27)
 * [ ] Deploy to the cloud a drift detection API (M27)
-* [ ] Instrument your API with a couple of system metrics (M28)
-* [ ] Setup cloud monitoring of your instrumented application (M28)
+* [x] Instrument your API with a couple of system metrics (M28)
+* [x] Setup cloud monitoring of your instrumented application (M28)
 * [ ] Create one or more alert systems in GCP to alert you if your app is not behaving correctly (M28)
 * [ ] If applicable, optimize the performance of your data loading using distributed data loading (M29)
-* [ ] If applicable, optimize the performance of your training pipeline by using distributed training (M30)
+* [x] If applicable, optimize the performance of your training pipeline by using distributed training (M30)
 * [ ] Play around with quantization, compilation and pruning for you trained models to increase inference speed (M31)
 
 ### Extra
@@ -299,7 +299,7 @@ https://github.com/FionaWennberg/mlops_group54/actions/workflows/tests.yaml this
 >
 > Answer:
 
---- To configure our experiments, we made use of Hydra config files in .yaml format. These are used to control parameters that affect the setup of the experiment, such as batch size, learnig rate, epochs among others. The aim was to keep every parameter that later could be changed out of the source code and keep these in the configuration files. The config files were divided into structured config sections for data, model, training and evaluation. An experiment can for example be run by: uv run python -m mlops_group54_project.evaluate, with optional terminal overrides. For example, overrides were made when testing out training with fewer epochs and smaller batch_sizes. ---
+--- To configure our experiments, we made use of Hydra config files in .yaml format. These are used to control parameters that affect the setup of the experiment, such as batch size, learnig rate, epochs among others. The aim was to keep every parameter that later could be changed out of the  code itself and keep these in the configuration files. The config files were divided into structured config sections for data, model, training and evaluation. An experiment can for example be run by: uv run python -m mlops_group54_project.evaluate, with optional terminal overrides. For example, overrides were made when testing out training with fewer epochs and smaller batch_sizes. ---
 
 ### Question 13
 
@@ -314,7 +314,7 @@ https://github.com/FionaWennberg/mlops_group54/actions/workflows/tests.yaml this
 >
 > Answer:
 
---- We made use of config files to ensure reproducibility of our experiments. Whenever an experiment is run, the complete experimental setup is defined through the Hydra YAML config files, including parameters for data handling, model architecture, training, and evaluation and etc. This means that no parameters are hard-coded in the source code, and all changes between experiments are only controlled through the config files or command-line overrides. Hydra automatically resolves and stores the final configuration used for each run as a folder (.hydra), making it possible to see exactly which parameters were applied. in addition to using configu files, we ensured reproducibility by managing dependencies consistently. All dependencies are installed using uv, which helps ensure that the same package versions are used across different environments and in CI. We also use DVC to version data and model artifacts, making it possible to retrieve the exact dataset and model versions used in a given experiment. 
+--- We made use of config files to ensure reproducibility of our experiments. Whenever an experiment is run, the complete experimental setup is defined through the Hydra YAML config files, including parameters for data handling, model architecture, training, and evaluation and etc. This means that no parameters are hard-coded in the source code, and all changes between experiments are only controlled through the config files or command-line overrides. Hydra automatically resolves and stores the final configuration used for each run as a folder (.hydra), making it possible to see exactly which parameters were applied. in addition to using config files, we ensured reproducibility by managing dependencies consistently. All dependencies are installed using uv, which helps ensure that the same package versions are used across different environments and in CI. We also use DVC to version data and model artifacts, making it possible to retrieve the exact dataset and model versions used in a given experiment. 
 
 To reproduce an experiment, one would check out the relevant Git commit, restore the corresponding data and model artifacts using DVC, and rerun the experiment using the same Hydra configuration files and command-line overrides. This way the experiments can be reproduced at a later time under the exact same conditions . ---
 
@@ -333,7 +333,7 @@ To reproduce an experiment, one would check out the relevant Git commit, restore
 >
 > Answer:
 
---- question 14 fill here ---
+--- Looking at the attached images, we have used W&B to log our training and evaluation. The training is used to observe how the model learns throughtout he training looking at how its loss and accuracy evolves. ---
 
 ### Question 15
 
