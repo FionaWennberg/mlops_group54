@@ -7,16 +7,23 @@ from typing import Any, Dict, List, Optional
 
 import csv
 import hashlib
+import json
+import os
+import time
 
 import numpy as np
 import torch
 from fastapi import BackgroundTasks, FastAPI, File, HTTPException, UploadFile
+from google.cloud import storage
 from PIL import Image
 from torchvision import transforms
 
 from mlops_group54_project.model import ModelConfig, build_model
 
 
+# ----------------------------
+# Device + preprocessing
+# ----------------------------
 def _device() -> torch.device:
     if torch.cuda.is_available():
         return torch.device("cuda")
@@ -58,6 +65,9 @@ def _image_quality_features(img: Image.Image) -> tuple[float, float, float]:
     return brightness, contrast, sharpness
 
 
+# ----------------------------
+# App + globals
+# ----------------------------
 app = FastAPI(title="Brain Tumor Inference API")
 
 DEVICE = _device()
@@ -66,11 +76,19 @@ TRANSFORM = _build_infer_transform(image_size=224)
 CHECKPOINT_PATH = Path("models/model.pth")
 CLASS_MAPPING_PATH = Path("data/processed/class_mapping.pt")
 
-# These will be set on startup (or remain None if files are missing)
 MODEL: Optional[torch.nn.Module] = None
 CLASS_NAMES: List[str] = []
 
-# Drift logging setup (CSV “database”)
+
+# ----------------------------
+# Monitoring config (Cloud Run friendly)
+# ----------------------------
+# If MONITORING_BUCKET is set, we log each request as a JSON object to GCS.
+# Otherwise we fall back to local CSV (useful for local dev / VM).
+MONITORING_BUCKET = os.getenv("MONITORING_BUCKET", "").strip()
+MONITORING_PREFIX = os.getenv("MONITORING_PREFIX", "monitoring/requests").strip()
+
+# Local fallback log (ephemeral on Cloud Run, persistent on VM with a mounted volume)
 REQUEST_LOG_PATH = Path("data/monitoring/requests.csv")
 REQUEST_LOG_PATH.parent.mkdir(parents=True, exist_ok=True)
 
@@ -82,6 +100,7 @@ CSV_HEADER = [
     "pred_idx",
     "pred_label",
     "confidence",
+    "latency_ms",
     # post-transform (normalized) per-channel statistics
     "mean_r",
     "mean_g",
@@ -105,7 +124,27 @@ def _append_csv_row(path: Path, header: list[str], row: list[Any]) -> None:
         w.writerow(row)
 
 
-def _log_request_to_csv(
+_gcs_client: storage.Client | None = None
+
+
+def _get_gcs_client() -> storage.Client:
+    global _gcs_client
+    if _gcs_client is None:
+        _gcs_client = storage.Client()
+    return _gcs_client
+
+
+def _upload_json_to_gcs(*, bucket_name: str, object_name: str, payload: dict) -> None:
+    client = _get_gcs_client()
+    bucket = client.bucket(bucket_name)
+    blob = bucket.blob(object_name)
+    blob.upload_from_string(
+        data=json.dumps(payload, ensure_ascii=False),
+        content_type="application/json",
+    )
+
+
+def _log_request(
     *,
     image_bytes: bytes,
     filename: str,
@@ -113,15 +152,59 @@ def _log_request_to_csv(
     pred_idx: int,
     pred_label: str,
     confidence: float,
+    latency_ms: float,
     ch_mean: list[float],
     ch_std: list[float],
     brightness: float,
     contrast: float,
     sharpness: float,
 ) -> None:
+    """
+    Logs a single prediction event.
+
+    Cloud Run mode (preferred): one JSON object per request to GCS:
+      gs://MONITORING_BUCKET/MONITORING_PREFIX/YYYY/MM/DD/<timestamp>_<sha>.json
+
+    Local/dev fallback: append to data/monitoring/requests.csv
+    """
     ts = datetime.now(timezone.utc).isoformat()
     sha = hashlib.sha256(image_bytes).hexdigest()
 
+    payload = {
+        "time_utc": ts,
+        "image_sha256": sha,
+        "filename": filename,
+        "content_type": content_type,
+        "pred_idx": int(pred_idx),
+        "pred_label": pred_label,
+        "confidence": float(confidence),
+        "latency_ms": float(latency_ms),
+        "mean_r": float(ch_mean[0]),
+        "mean_g": float(ch_mean[1]),
+        "mean_b": float(ch_mean[2]),
+        "std_r": float(ch_std[0]),
+        "std_g": float(ch_std[1]),
+        "std_b": float(ch_std[2]),
+        "brightness": float(brightness),
+        "contrast": float(contrast),
+        "sharpness": float(sharpness),
+    }
+
+    if MONITORING_BUCKET:
+        # Create stable, date-partitioned object names
+        date = ts[:10]  # YYYY-MM-DD
+        yyyy, mm, dd = date.split("-")
+        safe_ts = ts.replace(":", "").replace(".", "")
+        object_name = f"{MONITORING_PREFIX}/{yyyy}/{mm}/{dd}/{safe_ts}_{sha}.json"
+
+        _upload_json_to_gcs(
+            bucket_name=MONITORING_BUCKET,
+            object_name=object_name,
+            payload=payload,
+        )
+        return
+
+    # Fallback CSV (local dev / VM)
     _append_csv_row(
         REQUEST_LOG_PATH,
         CSV_HEADER,
@@ -133,6 +216,7 @@ def _log_request_to_csv(
             pred_idx,
             pred_label,
             float(confidence),
+            float(latency_ms),
             float(ch_mean[0]),
             float(ch_mean[1]),
             float(ch_mean[2]),
@@ -146,12 +230,28 @@ def _log_request_to_csv(
     )
 
 
+# ----------------------------
+# Metrics (simple Prometheus)
+# ----------------------------
+# This adds:
+# - /metrics endpoint
+# - request count / latency / status codes
+#
+# Add dependency: prometheus-fastapi-instrumentator
+try:
+    from prometheus_fastapi_instrumentator import Instrumentator
+
+    Instrumentator().instrument(app).expose(app, endpoint="/metrics", include_in_schema=False)
+except Exception:
+    # If dependency isn't installed, API still runs.
+    pass
+
+
+# ----------------------------
+# Startup: load model + class mapping
+# ----------------------------
 @app.on_event("startup")
 def _load_artifacts() -> None:
-    """
-    Load class mapping + model weights at server startup.
-    If files are missing (common in CI), keep MODEL=None and CLASS_NAMES=[].
-    """
     global MODEL, CLASS_NAMES
 
     if not CLASS_MAPPING_PATH.exists():
@@ -175,6 +275,9 @@ def _load_artifacts() -> None:
     MODEL = model
 
 
+# ----------------------------
+# Endpoints
+# ----------------------------
 @app.get("/")
 def health() -> Dict[str, Any]:
     return {
@@ -183,6 +286,8 @@ def health() -> Dict[str, Any]:
         "checkpoint": str(CHECKPOINT_PATH),
         "model_loaded": MODEL is not None,
         "num_classes": len(CLASS_NAMES),
+        "monitoring_bucket_set": bool(MONITORING_BUCKET),
+        "monitoring_prefix": MONITORING_PREFIX,
     }
 
 
@@ -214,23 +319,26 @@ async def predict(
     # Inference tensor (same transform, then batch + device)
     x = x_cpu.unsqueeze(0).to(DEVICE)
 
+    t0 = time.perf_counter()
     with torch.no_grad():
         logits = MODEL(x)
         probs = torch.softmax(logits, dim=1).squeeze(0)
         pred = int(torch.argmax(probs).item())
         confidence = float(probs[pred].item())
+    latency_ms = (time.perf_counter() - t0) * 1000.0
 
     pred_label = CLASS_NAMES[pred]
 
     # Background logging (does not block response)
     background_tasks.add_task(
-        _log_request_to_csv,
+        _log_request,
         image_bytes=image_bytes,
         filename=file.filename or "",
         content_type=file.content_type or "",
         pred_idx=pred,
         pred_label=pred_label,
         confidence=confidence,
+        latency_ms=latency_ms,
         ch_mean=ch_mean,
         ch_std=ch_std,
         brightness=brightness,
@@ -241,5 +349,6 @@ async def predict(
     return {
         "pred_class": pred,
         "pred_label": pred_label,
+        "latency_ms": float(latency_ms),
         "probs": {CLASS_NAMES[i]: float(probs[i]) for i in range(len(CLASS_NAMES))},
     }
