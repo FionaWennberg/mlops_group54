@@ -9,11 +9,16 @@ RUN apk add --no-cache \
 
 WORKDIR /app
 
-RUN mkdir -p models data/processed data/monitoring
-
 COPY uv.lock uv.lock
 COPY pyproject.toml pyproject.toml
+COPY LICENSE LICENSE
 COPY README.md README.md
+COPY .dvc/ .dvc/
+COPY .dvcignore .dvcignore
+COPY configs/ configs/
+COPY models.dvc models.dvc
+COPY data/processed.dvc data/processed.dvc
+
 
 RUN uv sync --frozen --no-install-project
 
@@ -23,5 +28,4 @@ RUN uv sync --frozen
 
 ENV PYTHONUNBUFFERED=1
 
-ENTRYPOINT ["bash", "-lc", "dvc pull models/model.pth && uv run uvicorn src.mlops_group54_project.api:app --host 0.0.0.0 --port 8000"]
-
+ENTRYPOINT ["bash", "-lc", "/app/.venv/bin/python -m dvc config core.no_scm True && /app/.venv/bin/python -m dvc pull models/model.pth && /app/.venv/bin/python -m dvc pull data/processed && /app/.venv/bin/python -m mlops_group54_project.api"]
