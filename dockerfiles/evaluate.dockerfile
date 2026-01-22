@@ -20,4 +20,4 @@ ENV DVC_NO_SCM=1
 
 RUN uv sync --locked --no-cache --no-install-project
 
-ENTRYPOINT ["bash", "-lc", "/app/.venv/bin/dvc pull models/model.pth && /app/.venv/bin/python -m mlops_group54_project.evaluate"]
+ENTRYPOINT ["bash", "-lc", "/app/.venv/bin/python -m dvc pull models/model.pth && /app/.venv/bin/python -m mlops_group54_project.evaluate"]
