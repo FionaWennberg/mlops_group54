@@ -104,41 +104,37 @@ Completed:
 •	Create a data storage in GCP Bucket for your data and link this with your data version control setup (M21)
 •	Create a FastAPI application that can do inference using your model (M22)
 •	Write API tests for your application and setup continues integration for these (M24)
+•	Add pre-commit hooks to your version control setup (M18)
+•	Get your model training in GCP using either the Engine or Vertex AI (M21)
 
 Not completed:
-•	Add pre-commit hooks to your version control setup (M18)
+
 •	Add a continues workflow that triggers when data changes (M19)
 •	Add a continues workflow that triggers when changes to the model registry is made (M19)
 •	Create a trigger workflow for automatically building your docker images (M21)
-•	Get your model training in GCP using either the Engine or Vertex AI (M21)
-•	Deploy your model in GCP using either Functions or Run as the backend (M23)
 •	Load test your application (M24)
 •	Create a more specialized ML-deployment API using either ONNX or BentoML, or both (M25)
 •	Create a frontend for your API (M26)
 
+•	Deploy your model in GCP using either Functions or Run as the backend (M23)
+
 Week 3:
 Completed:
-
-Not completed:
 •	Check how robust your model is towards data drifting (M27)
 •	Setup collection of input-output data from your deployed application (M27)
+•	If applicable, optimize the performance of your training pipeline by using distributed training (M30)
+
+Not completed:
+
 •	Deploy to the cloud a drift detection API (M27)
 •	Instrument your API with a couple of system metrics (M28)
 •	Setup cloud monitoring of your instrumented application (M28)
 •	Create one or more alert systems in GCP to alert you if your app is not behaving correctly (M28)
 •	If applicable, optimize the performance of your data loading using distributed data loading (M29)
-•	If applicable, optimize the performance of your training pipeline by using distributed training (M30)
+
 •	Play around with quantization, compilation and pruning for you trained models to increase inference speed (M31)
 
-# 30 questions:
 
-Answered:
-- 4
-- 6
-- 7
-- 9
 
-# Additional things to remember:
-- draw architectural design (see project day 5)
 
 
