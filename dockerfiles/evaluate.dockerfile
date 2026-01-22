@@ -19,6 +19,6 @@ COPY data/processed.dvc data/processed.dvc
 
 ENV PYTHONUNBUFFERED=1
 
-RUN uv sync --locked --no-cache --no-install-project
+RUN uv sync --locked --no-cache
 
-ENTRYPOINT ["bash", "-lc", "/app/.venv/bin/python -m dvc config core.no_scm True && /app/.venv/bin/python -m dvc pull models/model.pth && /app/.venv/bin/python -m mlops_group54_project.evaluate"]
+ENTRYPOINT ["bash", "-lc", "/app/.venv/bin/python -m dvc config core.no_scm True && /app/.venv/bin/python -m dvc pull models/model.pth && /app/.venv/bin/python -m dvc pull data/processed && /app/.venv/bin/python -m mlops_group54_project.evaluate"]
