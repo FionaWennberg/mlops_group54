@@ -487,7 +487,7 @@ Here you can find the dockerfile for the training: https://github.com/FionaWennb
 >
 > Answer:
 
---- question 25 fill here ---
+--- We implemented an integrationstest for the API. Here we tested the API’s end-to-end endpoint behavior and that the health endpoint responds correctly, /predict accepts valid image uploads and returns the expected output, and that invalid content types or corrupted image data are rejected with proper errors. We did not perform load testing, but we would follow the approach with using Locust. First, we would start the API locally and define an environment variable such as "MYENDPOINT=http://localhost:8000" or similar. Next, we would add a tests/performancetests/locustfile.py that simulates many users calling GET / and POST /predict. Finally, we would run Locust and report metrics such as average latency, p99 latency, requests/sec, and error rate while increasing concurrency to find the services capacity and bottlenecks. ---
 
 ### Question 26
 
@@ -568,7 +568,9 @@ Here you can find the dockerfile for the training: https://github.com/FionaWennb
 >
 > Answer:
 
---- question 30 fill here ---
+--- The overall biggest struggles in our project were related to deploying and operating the system in a cloud environment rather than developing the machine learning model itself. While model training, preprocessing, and local experimentation were relatively straightforward, a significant amount of time was spent understanding how the different cloud components fit together and how to operate this. One major challenge was integrating Docker with Google Cloud. Building container images that worked consistently both locally and in the cloud required careful handling of dependencies, file paths, and so on. Small mismatches between the local development environment and the Cloud Run execution environment often led to runtime errors that were difficult to solve for us. Related to this, it was sometimes unclear what code should live inside the container versus what should be handled by external cloud services, which slowed us down significantly. Another big challenge was deploying and implementing our FastAPI application in the cloud. While the API worked locally, getting it to run reliably on Cloud Run required much more work and understanding of container networking, environment variables, stateless execution, and logging. Similarly, implementing alerting and monitoring systems in GCP proved to be more diffcicult than expected, as it involved multiple services (Cloud Monitoring, alert policies, metrics) with not so much prior knowledge of how this works. 
+Overall, most of our time was spent understanding cloud setup, configuration, and deployment rather than working on the machine learning model itself. We handled these challenges mainly through trial and error, adding logging and print statements, and repeatedly testing small changes both locally and in the cloud. We also relied very much on documentation and examples from the course material to understand how different components were expected to work together and for guiding us through different problems.
+ ---
 
 ### Question 31
 
