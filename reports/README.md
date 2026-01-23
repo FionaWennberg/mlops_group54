@@ -416,8 +416,7 @@ Here you can find the dockerfile for the training: https://github.com/FionaWennb
 > **You can take inspiration from [this figure](figures/bucket.png).**
 >
 > Answer:
-
-![Bucket](image-3.png)
+![Bucket](image-6.png)
 
 The bucket contains separate prefixes for raw data, processed data, trained models, and monitoring outputs. The raw and processed datasets, along with the trained model files, are stored using DVC’s content-addressed storage mechanism. As a result, files appear with hashed names rather than human-readable filenames. They lie inside the folder "files".
 
