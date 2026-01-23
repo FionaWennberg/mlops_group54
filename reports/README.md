@@ -62,48 +62,48 @@ will check the repositories and the code to verify your answers.
     `pyproject.toml`/`uv.lock` up-to-date with whatever dependencies that you are using (M2+M6)
 * [ ] Remember to comply with good coding practices (`pep8`) while doing the project (M7)
 * [ ] Do a bit of code typing and remember to document essential parts of your code (M7)
-* [ ] Setup version control for your data or part of your data (M8)
+* [x] Setup version control for your data or part of your data (M8)
 * [ ] Add command line interfaces and project commands to your code where it makes sense (M9)
-* [ ] Construct one or multiple docker files for your code (M10)
-* [ ] Build the docker files locally and make sure they work as intended (M10)
-* [ ] Write one or multiple configurations files for your experiments (M11)
-* [ ] Used Hydra to load the configurations and manage your hyperparameters (M11)
+* [x] Construct one or multiple docker files for your code (M10)
+* [x] Build the docker files locally and make sure they work as intended (M10)
+* [x] Write one or multiple configurations files for your experiments (M11)
+* [x] Used Hydra to load the configurations and manage your hyperparameters (M11)
 * [ ] Use profiling to optimize your code (M12)
-* [ ] Use logging to log important events in your code (M14)
-* [ ] Use Weights & Biases to log training progress and other important metrics/artifacts in your code (M14)
+* [x] Use logging to log important events in your code (M14)
+* [x] Use Weights & Biases to log training progress and other important metrics/artifacts in your code (M14)
 * [ ] Consider running a hyperparameter optimization sweep (M14)
 * [ ] Use PyTorch-lightning (if applicable) to reduce the amount of boilerplate in your code (M15)
 
 ### Week 2
 
-* [ ] Write unit tests related to the data part of your code (M16)
-* [ ] Write unit tests related to model construction and or model training (M16)
-* [ ] Calculate the code coverage (M16)
-* [ ] Get some continuous integration running on the GitHub repository (M17)
-* [ ] Add caching and multi-os/python/pytorch testing to your continuous integration (M17)
-* [ ] Add a linting step to your continuous integration (M17)
-* [ ] Add pre-commit hooks to your version control setup (M18)
+* [x] Write unit tests related to the data part of your code (M16)
+* [x] Write unit tests related to model construction and or model training (M16)
+* [x] Calculate the code coverage (M16)
+* [x] Get some continuous integration running on the GitHub repository (M17)
+* [x] Add caching and multi-os/python/pytorch testing to your continuous integration (M17)
+* [x] Add a linting step to your continuous integration (M17)
+* [x] Add pre-commit hooks to your version control setup (M18)
 * [ ] Add a continues workflow that triggers when data changes (M19)
 * [ ] Add a continues workflow that triggers when changes to the model registry is made (M19)
-* [ ] Create a data storage in GCP Bucket for your data and link this with your data version control setup (M21)
-* [ ] Create a trigger workflow for automatically building your docker images (M21)
-* [ ] Get your model training in GCP using either the Engine or Vertex AI (M21)
-* [ ] Create a FastAPI application that can do inference using your model (M22)
+* [x] Create a data storage in GCP Bucket for your data and link this with your data version control setup (M21)
+* [x] Create a trigger workflow for automatically building your docker images (M21)
+* [x] Get your model training in GCP using either the Engine or Vertex AI (M21)
+* [x] Create a FastAPI application that can do inference using your model (M22)
 * [ ] Deploy your model in GCP using either Functions or Run as the backend (M23)
-* [ ] Write API tests for your application and setup continues integration for these (M24)
+* [x] Write API tests for your application and setup continues integration for these (M24)
 * [ ] Load test your application (M24)
 * [ ] Create a more specialized ML-deployment API using either ONNX or BentoML, or both (M25)
 * [ ] Create a frontend for your API (M26)
 
 ### Week 3
 
-* [ ] Check how robust your model is towards data drifting (M27)
-* [ ] Setup collection of input-output data from your deployed application (M27)
+* [x] Check how robust your model is towards data drifting (M27)
+* [x] Setup collection of input-output data from your deployed application (M27)
 * [ ] Deploy to the cloud a drift detection API (M27)
-* [ ] Instrument your API with a couple of system metrics (M28)
-* [ ] Setup cloud monitoring of your instrumented application (M28)
+* [x] Instrument your API with a couple of system metrics (M28)
+* [x] Setup cloud monitoring of your instrumented application (M28)
 * [ ] Create one or more alert systems in GCP to alert you if your app is not behaving correctly (M28)
-* [ ] If applicable, optimize the performance of your data loading using distributed data loading (M29)
+* [x] If applicable, optimize the performance of your data loading using distributed data loading (M29)
 * [ ] If applicable, optimize the performance of your training pipeline by using distributed training (M30)
 * [ ] Play around with quantization, compilation and pruning for you trained models to increase inference speed (M31)
 
@@ -278,12 +278,12 @@ In this test, we construct a minimal image folder structure that mimics a real d
 >
 > Answer:
 
---- Our continuous integration run two main CI workflows on every push and pull request to the main branch: linting and unit testing (including integrationsttest for the API). The linting workflow (linting.yaml) ensures code quality by running Ruff. This is to catch issues like an unused imports/variables, and to verify consistent formatting across both source code and tests. Our unit test workflow (tests.yaml) runs pytest together with coverage. We are testing across 3 operating systems (ubuntu-latest, windows-latest, and macos-latest) and 2 Python versions (3.11 and 3.12). This results in 6 separate CI jobs, each installing dependencies with uv, installing the project in editable mode, and running: 
+--- Our continuous integration run two main CI workflows on every push and pull request to the main branch: linting and unit testing (including integrationsttest for the API). The linting workflow (linting.yaml) ensures code quality by running Ruff. This is to catch issues like an unused imports/variables, and to verify consistent formatting across both source code and tests. Our unit test workflow (tests.yaml) runs pytest together with coverage. We are testing across 3 operating systems (ubuntu-latest, windows-latest, and macos-latest) and 2 Python versions (3.11 and 3.12). This results in 6 separate CI jobs, each installing dependencies with uv, installing the project in editable mode, and running:
 - coverage run -m pytest tests/
 - coverage report -m
 This runs the test and we recieve the code coverage report.
 This setup helps us find platform-specific issues and Python version compatibility problems early. Dependencies are installed using "uv sync --dev", making sure that the CI environment is consistent with our own local development setup. We use separate workflows to keep responsibilities clear: linting focuses on code style and formatting, while the test workflow runs tests and reports code coverage.
-https://github.com/FionaWennberg/mlops_group54/actions/workflows/tests.yaml this one? ---
+https://github.com/FionaWennberg/mlops_group54/actions/workflows/tests.yaml ---
 
 ## Running code and tracking experiments
 
@@ -302,7 +302,7 @@ https://github.com/FionaWennberg/mlops_group54/actions/workflows/tests.yaml this
 >
 > Answer:
 
---- To configure our experiments, we made use of Hydra config files in .yaml format. These are used to control parameters that affect the setup of the experiment, such as batch size, learnig rate, epochs among others. The aim was to keep every parameter that later could be changed out of the source code and keep these in the configuration files. The config files were divided into structured config sections for data, model, training and evaluation. An experiment can for example be run by: uv run python -m mlops_group54_project.evaluate, with optional terminal overrides. For example, overrides were made when testing out training with fewer epochs and smaller batch_sizes. ---
+--- To configure our experiments, we made use of Hydra config files in .yaml format. These are used to control parameters that affect the setup of the experiment, such as batch size, learnig rate, epochs among others. The aim was to keep every parameter that later could be changed out of the  code itself and keep these in the configuration files. The config files were divided into structured config sections for data, model, training and evaluation. An experiment can for example be run by: uv run python -m mlops_group54_project.evaluate, with optional terminal overrides. For example, overrides were made when testing out training with fewer epochs and smaller batch_sizes. ---
 
 ### Question 13
 
@@ -317,7 +317,7 @@ https://github.com/FionaWennberg/mlops_group54/actions/workflows/tests.yaml this
 >
 > Answer:
 
---- We made use of config files to ensure reproducibility of our experiments. Whenever an experiment is run, the complete experimental setup is defined through the Hydra YAML config files, including parameters for data handling, model architecture, training, and evaluation and etc. This means that no parameters are hard-coded in the source code, and all changes between experiments are only controlled through the config files or command-line overrides. Hydra automatically resolves and stores the final configuration used for each run as a folder (.hydra), making it possible to see exactly which parameters were applied. in addition to using configu files, we ensured reproducibility by managing dependencies consistently. All dependencies are installed using uv, which helps ensure that the same package versions are used across different environments and in CI. We also use DVC to version data and model artifacts, making it possible to retrieve the exact dataset and model versions used in a given experiment. 
+--- We made use of config files to ensure reproducibility of our experiments. Whenever an experiment is run, the complete experimental setup is defined through the Hydra YAML config files, including parameters for data handling, model architecture, training, and evaluation and etc. This means that no parameters are hard-coded in the source code, and all changes between experiments are only controlled through the config files or command-line overrides. Hydra automatically resolves and stores the final configuration used for each run as a folder (.hydra), making it possible to see exactly which parameters were applied. in addition to using configu files, we ensured reproducibility by managing dependencies consistently. All dependencies are installed using uv, which helps ensure that the same package versions are used across different environments and in CI. We also use DVC to version data and model artifacts, making it possible to retrieve the exact dataset and model versions used in a given experiment.
 
 To reproduce an experiment, one would check out the relevant Git commit, restore the corresponding data and model artifacts using DVC, and rerun the experiment using the same Hydra configuration files and command-line overrides. This way the experiments can be reproduced at a later time under the exact same conditions . ---
 
@@ -336,7 +336,16 @@ To reproduce an experiment, one would check out the relevant Git commit, restore
 >
 > Answer:
 
---- question 14 fill here ---
+---
+![Evaluation table](evaluation_table2.png)
+
+![Training curve](training_curve.png)
+
+![Logging Artifacts](logging_artifacts.png)
+
+Looking at the attached images, we have used W&B to log our training and evaluation. The training is used to observe how the model learns throughout the training looking at how its loss and accuracy evolves. In overall terms, tracking the evaluation gives an overview of the performance in a table showing the predictions and the true labels, which provides a detailed view of the model and it's applicability.
+
+Looking at our results it can be seen that the training curve converges nicely and the model is learning as the loss is decreasing and accuracy increasing. However, it is more important to look at the validation in between epochs, which shows a higher loss and lower accuracy and also a higher variation. This shows signs of overfitting to the training data, which is a likely cause for why the model struggles in generalising well to unseen data. However, when looking at the overall accuracy of the evaluation run, the model has an accuracy of 77,9% which is quite okay. On the contrary, there are large differences in the per class accuracies, where class 2 has an accuracy of 100% and class 0 has 24%, which can partially be explained by an uneven distribution of data. For fairness, it must be noted that due to constraints in available data, the data used for validation in the training was from the same folder of testing images, as the images in the evaluation, as we did not have a seperate testing and validation data set. In addition, W&B can be used to track artifacts of runs, which is useful for keeping a good structured overview of model, configuration and performance all together. ---
 
 ### Question 15
 
@@ -351,17 +360,8 @@ To reproduce an experiment, one would check out the relevant Git commit, restore
 >
 > Answer:
 
---- 
-We used Docker to make sure our project runs the same way on all machines and in all environments. Docker allowed us to package the code together with all required dependencies, so training and serving could be executed in a consistent and reproducible way.
-We created two Docker images. One image is used for model training, and the other is used for serving predictions through a FastAPI application. Each image has its own Dockerfile, which makes it clear what software and setup is needed for each task.
-
-The training image runs the full training pipeline and can be executed with:
-docker run --rm mlopsgroup54/train:latest
-
-Both images are stored in Google Cloud Artifact Registry (europe-west1-docker.pkg.dev/mlops2026-484211/mlopsgroup54/). The Dockerfile for the training image can be found here:
-https://github.com/FionaWennberg/mlops_group54/blob/main/dockerfiles/train.dockerfile
-
----
+--- We created three docker images, one for serving prediction via a FastAPI application and one for model training and one for model evaluation. The images were built using dedicated Dockerfiles and are stored in the in the Google Cloud Artifact Registry (europe-west1-docker.pkg.dev/mlops2026-484211/mlopsgroup54/). DVC was used inside of the docker to make sure we hadd all data which is stored in the bucket. The docker images were carefully coded so it wouldn't think it was inside of a git repository, therefore cloning only the necessary dependencies and files and code.
+Here you can find the dockerfile for the training: https://github.com/FionaWennberg/mlops_group54/blob/main/dockerfiles/train.dockerfile---
 
 ### Question 16
 
@@ -376,7 +376,7 @@ https://github.com/FionaWennberg/mlops_group54/blob/main/dockerfiles/train.docke
 >
 > Answer:
 
---- question 16 fill here ---
+--- During development of our project, some group members mainly used printing/logging while others used a more trial and error procedure in the terminal. In a few cases, we also used the VS Code debugger to step through the code and inspect variables when debugging more complex issues, such as model loading and FastAPI request handling. Since different group members worked on different parts of the codebase, the exact debugging method varied of course, but all methods seemed to solve the issues if present. We did not perform extensive profiling of our code. The main reason for this was that our workloads were relatively small, with limited data sizes, meaning performance bottlenecks were not a major concern. Instead, our focus was on correctness, reproducibility, and robustness of the pipeline. ---
 
 ## Working in the cloud
 
@@ -408,7 +408,7 @@ https://github.com/FionaWennberg/mlops_group54/blob/main/dockerfiles/train.docke
 >
 > Answer:
 
---- We used with the Compute Engine a VM instance to train our ResNet50 model. As it is heavy for a computer to train a deep learning model such as ours, it requires sufficient memory as well as disk space, which makes GCP resources more suitable than local machines. We chose boot-disk-size to be 50 GB, so that it could handle large dependicies, cached model weights and training artificats. The training job pulled processed data from a Google Cloud Storage bucket. We chose a e2-standard-4 machine type as it provides 16 GB of memory which is most suitable for our dataset. The instance was deployed in the europe-west1-b as our zone to minimize latency. ---
+--- We used with the Compute Engine a VM instance to train our ResNet50 model. It requires sufficient memory as well as disk space, and we therefore chose boot-disk-size to be 100 GB, so that it could handle large dependicies, cached model weights and training artificats. The training job pulled processed data from a Google Cloud Storage bucket. We chose a e2-standard-4 machine type as it provides 16 GB of memory which is most suitable for our dataset. The instance was deployed in the europe-west1-b zone. We trained our model inside of the instance using our Docker images which were uploaded in the Artifact Registry inside GCP, as the image contained all the essential code and data that is needed. ---
 
 ### Question 19
 
@@ -417,8 +417,9 @@ https://github.com/FionaWennberg/mlops_group54/blob/main/dockerfiles/train.docke
 >
 > Answer:
 
-![Buckets](image.png)
+![Bucket](image-3.png)
 
+The bucket contains separate prefixes for raw data, processed data, trained models, and monitoring outputs. The raw and processed datasets, along with the trained model files, are stored using DVC’s content-addressed storage mechanism. As a result, files appear with hashed names rather than human-readable filenames. They lie inside the folder "files".
 
 ### Question 20
 
@@ -427,7 +428,8 @@ https://github.com/FionaWennberg/mlops_group54/blob/main/dockerfiles/train.docke
 >
 > Answer:
 
-![Artifact](image-1.png)
+![Artifact](image-4.png)
+
 
 ### Question 21
 
@@ -436,7 +438,7 @@ https://github.com/FionaWennberg/mlops_group54/blob/main/dockerfiles/train.docke
 >
 > Answer:
 
-![Google Cloud Build](image-2.png)
+![Google Cloud Build](image-5.png)
 
 ### Question 22
 
@@ -451,7 +453,9 @@ https://github.com/FionaWennberg/mlops_group54/blob/main/dockerfiles/train.docke
 >
 > Answer:
 
---- We trained our model in the cloud using the Engine with a VM instance as described in question 18. The reason as to why we chose the engine was because ---
+--- We successfully trained our model in the cloud using the Engine with a VM instance in the cloud as described in question 18. Compute Engine was chosen because it offers flexible control over hardware resources, disk size, and runtime configuration, which made it well suited for running longer and more resource-intensive training jobs. We created a VM and ran docker images in order to train and evaluate our model and thereafter log the results to W&B. Doing it through the Compute Engine ensured more control over the training workflow, compared to Vertex AI, which is important for debugging and  experiment iteration as well as integration with our MLOPS setup. 
+
+The image also shows some failed builds and those are originating from our attempt to create an automatic workflow, which builds docker images every time we push to the main brnach in github. As this integration kempt failing, we eventually disabled the trigger. ---
 
 ## Deployment
 
@@ -468,7 +472,7 @@ https://github.com/FionaWennberg/mlops_group54/blob/main/dockerfiles/train.docke
 >
 > Answer:
 
---- question 23 fill here ---
+--- We wrote an API for our model using FastAPI, which we first tested locally. We did this by first training the model locally and saving a model path, which was then used by the API for inference. The API was tested by uploading some MRI images in the browser and observaing, if the output matched the expected format of a predicted class and confidence of it. A few modifications were made to the output format after testing it, such as adding class-labels and not just integers to make it more user-friendly. This local version was also used for a drift detection service, where batch_requests.py was used to automatically feed the API with approximately 200 MRI images, to get some data distribution and comparing it to a reference set of observations from the training images. data_drift.py was then used to compare the two distributions, resulting in the drift_report.html.   ---
 
 ### Question 24
 
@@ -484,7 +488,9 @@ https://github.com/FionaWennberg/mlops_group54/blob/main/dockerfiles/train.docke
 >
 > Answer:
 
---- question 24 fill here ---
+--- We did deploy our inference API, both locally as described above and in the cloud. It was deployed to the cloud by first containerising it by creating a docker image. This was then build in the cloud and stored in Artifact Registry, whereafter it was deployed using Cloud Run, which provides a URL for the inference API, making it fully deployed. To invoke the service, the user could use the following URL and upload an MRI scanning: https://api-471217209210.europe-west1.run.app/docs 
+
+Cloud run was used instead of building in a VM, because it provides request based functionality and does not require a continuously running server to remain available. ---
 
 ### Question 25
 
@@ -499,7 +505,7 @@ https://github.com/FionaWennberg/mlops_group54/blob/main/dockerfiles/train.docke
 >
 > Answer:
 
---- question 25 fill here ---
+--- We implemented an integrationstest for the API. Here we tested the API’s end-to-end endpoint behavior and that the health endpoint responds correctly, /predict accepts valid image uploads and returns the expected output, and that invalid content types or corrupted image data are rejected with proper errors. We did not perform load testing, but we would follow the approach with using Locust. First, we would start the API locally and define an environment variable such as "MYENDPOINT=http://localhost:8080" or similar. Next, we would add a tests/performancetests/locustfile.py that simulates many users calling GET / and POST /predict. Finally, we would run Locust and report metrics such as average latency, p99 latency, requests/sec, and error rate while increasing concurrency to find the services capacity and bottlenecks. ---
 
 ### Question 26
 
@@ -514,7 +520,7 @@ https://github.com/FionaWennberg/mlops_group54/blob/main/dockerfiles/train.docke
 >
 > Answer:
 
---- question 26 fill here ---
+--- We first implemented a monitoring system locally, which collected all requests into a csv file, but after deploying the inference API to the cloud, we also implemented a monitoring setup in the cloud. All requests made through the API would be gathered into a bucket, which could be used to monitor data drifting and the performance of our model over time. This is useful, as it is likely that the quality of MRI scans will evolve as technology evolves, and therefore it is important to know, when the data in the requests is drifting away from the data our mdoel was trained on causing the performance of our model to decrease over time. If the model is not adjusted over time, its usability drops and it eventually becomes unuseful and even dangerous specifically in the medical field, where patients' health is depending on it's predictions. This type og ML model is therefore never really finished, but must be maintained over time. ---
 
 ## Overall discussion of project
 
@@ -549,7 +555,7 @@ https://github.com/FionaWennberg/mlops_group54/blob/main/dockerfiles/train.docke
 >
 > Answer:
 
---- question 28 fill here ---
+--- As mentioned in other questions above, we implemented drift detection as it is important to keep track of our mdoels performance over time. It is likely that the quality of MRI scans will evolce over time, which makes it important to also update the model and retrain it over time to maximise its performance.  ---
 
 ### Question 29
 
@@ -584,7 +590,9 @@ The processed data is then used as input to the training step. The training cont
 >
 > Answer:
 
---- question 30 fill here ---
+--- The overall biggest struggles in our project were related to deploying and operating the system in a cloud environment rather than developing the machine learning model itself. While model training, preprocessing, and local experimentation were relatively straightforward, a significant amount of time was spent understanding how the different cloud components fit together and how to operate this. One major challenge was integrating Docker with Google Cloud. Building container images that worked consistently both locally and in the cloud required careful handling of dependencies, file paths, and so on. Small mismatches between the local development environment and the Cloud Run execution environment often led to runtime errors that were difficult to solve for us. Related to this, it was sometimes unclear what code should live inside the container versus what should be handled by external cloud services, which slowed us down significantly. Another big challenge was deploying and implementing our FastAPI application in the cloud. While the API worked locally, getting it to run reliably on Cloud Run required much more work and understanding of container networking, environment variables, stateless execution, and logging. Similarly, implementing alerting and monitoring systems in GCP proved to be more diffcicult than expected, as it involved multiple services (Cloud Monitoring, alert policies, metrics) with not so much prior knowledge of how this works.
+Overall, most of our time was spent understanding cloud setup, configuration, and deployment rather than working on the machine learning model itself. We handled these challenges mainly through trial and error, adding logging and print statements, and repeatedly testing small changes both locally and in the cloud. We also relied very much on documentation and examples from the course material to understand how different components were expected to work together and for guiding us through different problems.
+ ---
 
 ### Question 31
 

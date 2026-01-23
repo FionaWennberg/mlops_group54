@@ -32,9 +32,12 @@ dependencies = [
     "markdown>=3.10",
     "evidently>=0.7.20",
     "scikit-learn>=1.8.0",
+    "google-cloud-storage>=2.10.0",
+    "prometheus-fastapi-instrumentator>=6.1.0",
     "pandas>=2.3.3",
     "dvc[gs]>=3.66.1",
     "pathspec==0.11.2",
+    "locust>=2.43.1",
 ]
 
 [dependency-groups]

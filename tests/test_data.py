@@ -36,7 +36,6 @@ def test_folderdataset_constructs_with_minimal_imagefolder_structure(tmp_path: P
     class_dir = tmp_path / "class_a"
     class_dir.mkdir(parents=True)
 
-    # Create a tiny valid JPEG image
     img_path = class_dir / "img1.jpg"
     Image.new("RGB", (8, 8), color=(255, 0, 0)).save(img_path)
 
@@ -71,7 +70,6 @@ def test_stack_dataset_to_tensors_shapes():
 
 
 def test_preprocess_and_save_happy_path_mocks(tmp_path, monkeypatch):
-    # capture torch.save calls without writing files
     save_calls = []
 
     def fake_torch_save(obj, path):
@@ -193,7 +191,6 @@ def test_to_data_config_reads_fields_and_defaults():
     assert dc.num_workers == 4
     assert dc.preprocess_batch_size == 64
 
-    # without preprocess_batch_size -> default 64
     cfg2 = OmegaConf.create(
         {
             "data": {
