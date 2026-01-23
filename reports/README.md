@@ -280,7 +280,7 @@ will check the repositories and the code to verify your answers.
 - coverage report -m
 This runs the test and we recieve the code coverage report.
 This setup helps us find platform-specific issues and Python version compatibility problems early. Dependencies are installed using "uv sync --dev", making sure that the CI environment is consistent with our own local development setup. We use separate workflows to keep responsibilities clear: linting focuses on code style and formatting, while the test workflow runs tests and reports code coverage.
-https://github.com/FionaWennberg/mlops_group54/actions/workflows/tests.yaml this one? ---
+https://github.com/FionaWennberg/mlops_group54/actions/workflows/tests.yaml ---
 
 ## Running code and tracking experiments
 
@@ -334,7 +334,7 @@ To reproduce an experiment, one would check out the relevant Git commit, restore
 > Answer:
 
 ---
-![Evaluation table](evaluation_table1.png)
+![Evaluation table](evaluation_table2.png)
 
 ![Training curve](training_curve.png)
 
@@ -450,7 +450,9 @@ The bucket contains separate prefixes for raw data, processed data, trained mode
 >
 > Answer:
 
---- We successfully trained our model in the cloud using the Engine with a VM instance in the cloud as described in question 18. Compute Engine was chosen because it offers flexible control over hardware resources, disk size, and runtime configuration, which made it well suited for running longer and more resource-intensive training jobs. We created a VM and ran docker images in order to train and evaluate our model and thereafter log the results to W&B. Doing it through the Compute Engine ensured more control over the training workflow, compared to Vertex AI, which is important for debugging and  experiment iteration as well as integration with our MLOPS setup. ---
+--- We successfully trained our model in the cloud using the Engine with a VM instance in the cloud as described in question 18. Compute Engine was chosen because it offers flexible control over hardware resources, disk size, and runtime configuration, which made it well suited for running longer and more resource-intensive training jobs. We created a VM and ran docker images in order to train and evaluate our model and thereafter log the results to W&B. Doing it through the Compute Engine ensured more control over the training workflow, compared to Vertex AI, which is important for debugging and  experiment iteration as well as integration with our MLOPS setup. 
+
+The image also shows some failed builds and those are originating from our attempt to create an automatic workflow, which builds docker images every time we push to the main brnach in github. As this integration kempt failing, we eventually disabled the trigger. ---
 
 ## Deployment
 
@@ -467,7 +469,7 @@ The bucket contains separate prefixes for raw data, processed data, trained mode
 >
 > Answer:
 
---- We wrote an API for our model using FastAPI, which we first tested locally. We did this by first training the model locally and saving a model path, which was then used by the API for inference. The API was tested by uploading some MRI images in the browser and observaing, if the output matched the expected format of a predicted class and confidence of it. A few modifications were made to the output, such as adding class-labels and not just integers to make it more user-friendly. This local version was also used for a drift detection service, where batch_requests.py was used to automatically feed the API with approximately 200 MRI images, to get some data distribution and comparing it to a reference set of observations from the training images. data_drift.py was then used to compare the two distributions.   ---
+--- We wrote an API for our model using FastAPI, which we first tested locally. We did this by first training the model locally and saving a model path, which was then used by the API for inference. The API was tested by uploading some MRI images in the browser and observaing, if the output matched the expected format of a predicted class and confidence of it. A few modifications were made to the output format after testing it, such as adding class-labels and not just integers to make it more user-friendly. This local version was also used for a drift detection service, where batch_requests.py was used to automatically feed the API with approximately 200 MRI images, to get some data distribution and comparing it to a reference set of observations from the training images. data_drift.py was then used to compare the two distributions, resulting in the drift_report.html.   ---
 
 ### Question 24
 
@@ -515,7 +517,7 @@ Cloud run was used instead of building in a VM, because it provides request base
 >
 > Answer:
 
---- question 26 fill here ---
+--- We first implemented a monitoring system locally, which collected all requests into a csv file, but after deploying the inference API to the cloud, we also implemented a monitoring setup in the cloud. All requests made through the API would be gathered into a bucket, which could be used to monitor data drifting and the performance of our model over time. This is useful, as it is likely that the quality of MRI scans will evolve as technology evolves, and therefore it is important to know, when the data in the requests is drifting away from the data our mdoel was trained on causing the performance of our model to decrease over time. ---
 
 ## Overall discussion of project
 
@@ -550,7 +552,7 @@ Cloud run was used instead of building in a VM, because it provides request base
 >
 > Answer:
 
---- question 28 fill here ---
+--- As mentioned in other questions above, we implemented drift detection as it is important to keep track of our mdoels performance over time. It is likely that the quality of MRI scans will evolce over time, which makes it important to also update the model and retrain it over time to maximise its performance.  ---
 
 ### Question 29
 
