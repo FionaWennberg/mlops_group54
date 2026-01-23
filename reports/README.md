@@ -467,7 +467,7 @@ The bucket contains separate prefixes for raw data, processed data, trained mode
 >
 > Answer:
 
---- HERE ---
+--- We wrote an API for our model using FastAPI, which we first tested locally. We did this by first training the model locally and saving a model path, which was then used by the API for inference. The API was tested by uploading some MRI images in the browser and observaing, if the output matched the expected format of a predicted class and confidence of it. A few modifications were made to the output, such as adding class-labels and not just integers to make it more user-friendly. This local version was also used for a drift detection service, where batch_requests.py was used to automatically feed the API with approximately 200 MRI images, to get some data distribution and comparing it to a reference set of observations from the training images. data_drift.py was then used to compare the two distributions.   ---
 
 ### Question 24
 
@@ -483,7 +483,9 @@ The bucket contains separate prefixes for raw data, processed data, trained mode
 >
 > Answer:
 
---- We did deploy our API, using the docker image in a VM instance were it deployed the results in our Google Storage Bucket under monitoring. Skriver videre på det i morgen. ---
+--- We did deploy our inference API, both locally as described above and in the cloud. It was deployed to the cloud by first containerising it by creating a docker image. This was then build in the cloud and stored in Artifact Registry, whereafter it was deployed using Cloud Run, which provides a URL for the inference API, making it fully deployed. To invoke the service, the user could use the following URL and upload an MRI scanning: https://api-471217209210.europe-west1.run.app/docs 
+
+Cloud run was used instead of building in a VM, because it provides request based functionality and does not require a continuously running server to remain available. ---
 
 ### Question 25
 
