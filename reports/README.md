@@ -103,8 +103,8 @@ will check the repositories and the code to verify your answers.
 * [x] Instrument your API with a couple of system metrics (M28)
 * [x] Setup cloud monitoring of your instrumented application (M28)
 * [ ] Create one or more alert systems in GCP to alert you if your app is not behaving correctly (M28)
-* [ ] If applicable, optimize the performance of your data loading using distributed data loading (M29)
-* [x] If applicable, optimize the performance of your training pipeline by using distributed training (M30)
+* [x] If applicable, optimize the performance of your data loading using distributed data loading (M29)
+* [ ] If applicable, optimize the performance of your training pipeline by using distributed training (M30)
 * [ ] Play around with quantization, compilation and pruning for you trained models to increase inference speed (M31)
 
 ### Extra
@@ -517,7 +517,7 @@ Cloud run was used instead of building in a VM, because it provides request base
 >
 > Answer:
 
---- We first implemented a monitoring system locally, which collected all requests into a csv file, but after deploying the inference API to the cloud, we also implemented a monitoring setup in the cloud. All requests made through the API would be gathered into a bucket, which could be used to monitor data drifting and the performance of our model over time. This is useful, as it is likely that the quality of MRI scans will evolve as technology evolves, and therefore it is important to know, when the data in the requests is drifting away from the data our mdoel was trained on causing the performance of our model to decrease over time. ---
+--- We first implemented a monitoring system locally, which collected all requests into a csv file, but after deploying the inference API to the cloud, we also implemented a monitoring setup in the cloud. All requests made through the API would be gathered into a bucket, which could be used to monitor data drifting and the performance of our model over time. This is useful, as it is likely that the quality of MRI scans will evolve as technology evolves, and therefore it is important to know, when the data in the requests is drifting away from the data our mdoel was trained on causing the performance of our model to decrease over time. If the model is not adjusted over time, its usability drops and it eventually becomes unuseful and even dangerous specifically in the medical field, where patients' health is depending on it's predictions. This type og ML model is therefore never really finished, but must be maintained over time. ---
 
 ## Overall discussion of project
 
