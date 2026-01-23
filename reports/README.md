@@ -112,9 +112,9 @@ will check the repositories and the code to verify your answers.
 * [ ] Write some documentation for your application (M32)
 * [ ] Publish the documentation to GitHub Pages (M32)
 * [ ] Revisit your initial project description. Did the project turn out as you wanted?
-* [ ] Create an architectural diagram over your MLOps pipeline
-* [ ] Make sure all group members have an understanding about all parts of the project
-* [ ] Uploaded all your code to GitHub
+* [x] Create an architectural diagram over your MLOps pipeline
+* [x] Make sure all group members have an understanding about all parts of the project
+* [x] Uploaded all your code to GitHub
 
 ## Group information
 
@@ -452,7 +452,7 @@ The bucket contains separate prefixes for raw data, processed data, trained mode
 >
 > Answer:
 
---- We successfully trained our model in the cloud using the Engine with a VM instance in the cloud as described in question 18. Compute Engine was chosen because it offers flexible control over hardware resources, disk size, and runtime configuration, which made it well suited for running longer and more resource-intensive training jobs. We created a VM and ran docker images in order to train and evaluate our model and thereafter log the results to W&B. Doing it through the Compute Engine ensured more control over the training workflow, compared to Vertex AI, which is important for debugging and  experiment iteration as well as integration with our MLOPS setup. 
+--- We successfully trained our model in the cloud using the Engine with a VM instance in the cloud as described in question 18. Compute Engine was chosen because it offers flexible control over hardware resources, disk size, and runtime configuration, which made it well suited for running longer and more resource-intensive training jobs. We created a VM and ran docker images in order to train and evaluate our model and thereafter log the results to W&B. Doing it through the Compute Engine ensured more control over the training workflow, compared to Vertex AI, which is important for debugging and  experiment iteration as well as integration with our MLOPS setup.
 
 The image also shows some failed builds and those are originating from our attempt to create an automatic workflow, which builds docker images every time we push to the main brnach in github. As this integration kempt failing, we eventually disabled the trigger. ---
 
@@ -487,7 +487,7 @@ The image also shows some failed builds and those are originating from our attem
 >
 > Answer:
 
---- We did deploy our inference API, both locally as described above and in the cloud. It was deployed to the cloud by first containerising it by creating a docker image. This was then build in the cloud and stored in Artifact Registry, whereafter it was deployed using Cloud Run, which provides a URL for the inference API, making it fully deployed. To invoke the service, the user could use the following URL and upload an MRI scanning: https://api-471217209210.europe-west1.run.app/docs 
+--- We did deploy our inference API, both locally as described above and in the cloud. It was deployed to the cloud by first containerising it by creating a docker image. This was then build in the cloud and stored in Artifact Registry, whereafter it was deployed using Cloud Run, which provides a URL for the inference API, making it fully deployed. To invoke the service, the user could use the following URL and upload an MRI scanning: https://api-471217209210.europe-west1.run.app/docs
 
 Cloud run was used instead of building in a VM, because it provides request based functionality and does not require a continuously running server to remain available. ---
 
@@ -608,4 +608,10 @@ Overall, most of our time was spent understanding cloud setup, configuration, an
 > *We have used ChatGPT to help debug our code. Additionally, we used GitHub Copilot to help write some of our code.*
 > Answer:
 
---- question 31 fill here ---
+s245290 was mainly responsible for the initial project setup and data handling. This included creating the GitHub repository, setting up the Python environment, and initializing the project structure using a cookiecutter template. They implemented the data ingestion and preprocessing pipeline in data.py and set up data version control using DVC, including linking the data storage to a GCP bucket. They also contributed to unit tests related to the data pipeline.
+
+s223643 focused on model development and training. They implemented the model architecture and training procedure, integrated Hydra for configuration and hyperparameter management, and added logging and experiment tracking using Weights & Biases. They were also responsible for running model training on GCP and optimizing data loading where applicable.
+
+s246024 worked primarily on CI/CD, testing, and containerization. They created Dockerfiles, built and tested images locally, and set up continuous integration with unit tests, code coverage, linting, caching, and pre-commit hooks. They also implemented automated Docker builds.
+
+s244322 focused on deployment, monitoring, and robustness. They developed the FastAPI inference service, wrote API tests, implemented data drift detection and monitoring, and contributed to system metrics, cloud monitoring, and the architectural diagram of the MLOps pipeline.
