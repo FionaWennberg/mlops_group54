@@ -351,18 +351,15 @@ To reproduce an experiment, one would check out the relevant Git commit, restore
 >
 > Answer:
 
---- We created two docker images, one for serving prediction via a FastAPI application and one for model training. The images were built using dedicated Dockerfiles and are stored in the in the Google Cloud Artifact Registry (europe-west1-docker.pkg.dev/mlops2026-484211/mlopsgroup54/).
-Here you can find the dockerfile for the training: https://github.com/FionaWennberg/mlops_group54/blob/main/dockerfiles/train.dockerfile 
+--- 
+We used Docker to make sure our project runs the same way on all machines and in all environments. Docker allowed us to package the code together with all required dependencies, so training and serving could be executed in a consistent and reproducible way.
+We created two Docker images. One image is used for model training, and the other is used for serving predictions through a FastAPI application. Each image has its own Dockerfile, which makes it clear what software and setup is needed for each task.
 
-Docker was used to ensure reproducibility and consistent environments across local development.
-We created two docker images, one for serving prediction via a FastAPI application and one for model training. The images were built using dedicated Dockerfiles and are stored in the Google Cloud Artifact Registry (europe-west1-docker.pkg.dev/mlops2026-484211/mlopsgroup54/). To run the model training we ran docker run mlopsgroup54/train:latest, and
-
-The training image can be run using:
+The training image runs the full training pipeline and can be executed with:
 docker run --rm mlopsgroup54/train:latest
 
-The serving image can be run using:
-docker run -p 8000:8000 mlopsgroup54/serve:latest
-
+Both images are stored in Google Cloud Artifact Registry (europe-west1-docker.pkg.dev/mlops2026-484211/mlopsgroup54/). The Dockerfile for the training image can be found here:
+https://github.com/FionaWennberg/mlops_group54/blob/main/dockerfiles/train.dockerfile
 
 ---
 
