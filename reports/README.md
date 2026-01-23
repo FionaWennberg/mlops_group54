@@ -144,8 +144,11 @@ will check the repositories and the code to verify your answers.
 > *package to do ... and ... in our project*.
 >
 > Answer:
+Yes, we used the open-source library Pillow (imported as from PIL import Image), which was not a central part of the project but was used specifically for testing. Pillow is only used in one test to create a small, valid image file on disk.
+In this test, we construct a minimal image folder structure that mimics a real dataset setup. Using Pillow, we generate a tiny JPEG image (8×8 pixels) and save it to the correct directory. This allows our dataset code to load an actual image file instead of an empty or fake file. As a result, we can test the dataset construction end-to-end in a realistic way.
 
---- question 3 fill here ---
+
+
 
 ## Coding environment
 
@@ -413,8 +416,7 @@ Here you can find the dockerfile for the training: https://github.com/FionaWennb
 > **You can take inspiration from [this figure](figures/bucket.png).**
 >
 > Answer:
-
-![Bucket](image-3.png)
+![Bucket](image-6.png)
 
 The bucket contains separate prefixes for raw data, processed data, trained models, and monitoring outputs. The raw and processed datasets, along with the trained model files, are stored using DVC’s content-addressed storage mechanism. As a result, files appear with hashed names rather than human-readable filenames. They lie inside the folder "files".
 
@@ -568,8 +570,12 @@ Cloud run was used instead of building in a VM, because it provides request base
 > *Whenever we commit code and push to GitHub, it auto triggers ... and ... . From there the diagram shows ...*
 >
 > Answer:
-
---- question 29 fill here ---
+The pipeline starts from a local development machine, where the project repository is cloned from GitHub. The repository contains the preprocessing and training code, Hydra configuration files, Dockerfiles, and DVC metadata files, all version controlled using Git. Pipeline execution is initiated locally by running Docker, which launches docker containers with preprocessing and training.
+The dataset originally originates from Kaggle and is stored in Google Cloud Storage, where the data files are physically located. DVC is used to track and version the dataset and all derived artifacts, while only the corresponding .dvc files are committed to the Git repository.
+During execution, Hydra is responsible for loading and applying a specific set of configuration files that define data paths, preprocessing parameters, model settings, and training hyperparameters. This ensures that each run is executed with an explicit and reproducible configuration.
+The raw dataset is stored in Google Cloud Storage and tracked using DVC. When the preprocessing container is executed, the raw dataset stored in Google Cloud Storage is made available locally through DVC and transformed into processed data, which is then stored back in Google Cloud Storage and tracked as a new DVC version.
+The processed data is then used as input to the training step. The training container consumes the processed dataset together with the Hydra configuration and produces a trained model. The trained model is stored in Google Cloud Storage and versioned using DVC, enabling reproducibility and traceability across experiments.
+![alt text](image-3.png)
 
 ### Question 30
 
